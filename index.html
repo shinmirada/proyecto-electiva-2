@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Conversor de Monedas</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <div class="floating-shapes">
+    <div class="shape"></div>
+    <div class="shape"></div>
+    <div class="shape"></div>
+  </div>
+
+  <div class="container">
+
+    <!-- ================= INTERFAZ 1: Conversor ================= -->
+    <div id="interfaz-conversor">
+      <div class="header">
+        <h1 class="title">💱 Conversor</h1>
+        <p class="subtitle">Convierte monedas al instante</p>
+      </div>
+
+      <!-- El formulario llama a convertir() -->
+      <form class="converter-form" id="formularioConversor" onsubmit="convertir(); return false;">
+        <div class="input-group">
+          <label class="input-label" for="cantidadOrigen">Cantidad a convertir</label>
+          <div class="input-container">
+            <input type="number" id="cantidadOrigen" class="currency-input" placeholder="0.00" step="0.01" min="0" value="100">
+            <select id="monedaOrigen" class="currency-select">
+              <option value="USD">USD 🇺🇸</option>
+              <option value="EUR">EUR 🇪🇺</option>
+              <option value="GBP">GBP 🇬🇧</option>
+              <option value="JPY">JPY 🇯🇵</option>
+              <option value="CAD">CAD 🇨🇦</option>
+              <option value="AUD">AUD 🇦🇺</option>
+              <option value="CHF">CHF 🇨🇭</option>
+              <option value="CNY">CNY 🇨🇳</option>
+              <option value="COP" selected>COP 🇨🇴</option>
+              <option value="MXN">MXN 🇲🇽</option>
+              <option value="BRL">BRL 🇧🇷</option>
+              <option value="ARS">ARS 🇦🇷</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="swap-container">
+          <!-- Llama a intercambiar() -->
+          <button type="button" class="swap-button" onclick="intercambiar()">
+            <span class="swap-icon">⇄</span>
+          </button>
+        </div>
+
+        <div class="input-group">
+          <label class="input-label" for="cantidadDestino">Resultado</label>
+          <div class="input-container">
+            <input type="number" id="cantidadDestino" class="currency-input" placeholder="0.00" readonly>
+            <select id="monedaDestino" class="currency-select">
+              <option value="USD" selected>USD 🇺🇸</option>
+              <option value="EUR">EUR 🇪🇺</option>
+              <option value="GBP">GBP 🇬🇧</option>
+              <option value="JPY">JPY 🇯🇵</option>
+              <option value="CAD">CAD 🇨🇦</option>
+              <option value="AUD">AUD 🇦🇺</option>
+              <option value="CHF">CHF 🇨🇭</option>
+              <option value="CNY">CNY 🇨🇳</option>
+              <option value="COP">COP 🇨🇴</option>
+              <option value="MXN">MXN 🇲🇽</option>
+              <option value="BRL">BRL 🇧🇷</option>
+              <option value="ARS">ARS 🇦🇷</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="button-group">
+          <!-- Llama a convertir() al enviar -->
+          <button type="submit" class="convert-button">
+            <span class="button-text">Convertir Ahora</span>
+            <span class="button-icon">💰</span>
+          </button>
+
+          <!-- Llama a mostrarHistorial() -->
+          <button type="button" class="history-button" onclick="mostrarHistorial()">
+            <span class="button-text">Ver Historial</span>
+            <span class="button-icon">📊</span>
+          </button>
+        </div>
+      </form>
+
+      <div class="result-container" id="contenedorResultado">
+        <div class="result-text" id="textoResultado">No hay resultado todavía</div>
+        <div class="result-rate" id="tasaResultado"></div>
+      </div>
+    </div>
+
+    <!-- ================= INTERFAZ 2: Historial ================= -->
+    <div id="interfaz-historial" style="display:none;">
+      <div class="header">
+        <h2 class="title">📊 Historial de Conversiones</h2>
+        <!-- Llama a mostrarConversor() -->
+        <button class="close-button" onclick="mostrarConversor()">✕</button>
+      </div>
+      <div class="history-controls">
+        <!-- Llama a limpiarHistorial() -->
+        <button class="clear-history-button" onclick="limpiarHistorial()">
+          🗑️ Limpiar Historial
+        </button>
+      </div>
+      <div class="history-list" id="listaHistorialHtml">
+        (Todavía no hay conversiones)
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Script compilado -->
+  <script type="module" src="dist/Script.js"></script>
+</body>
+</html>

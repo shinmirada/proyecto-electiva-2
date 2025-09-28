@@ -1,0 +1,162 @@
+import { TasaCambio } from "./TasaCambio.js";
+import type { RawTasa } from "./Tipos.js";
+
+const rawTasas: RawTasa[] = [
+
+    ["USD", "COP", 3900],
+    ["COP", "USD", 0.00026],
+    ["USD", "EUR", 0.93],
+    ["EUR", "USD", 1.07],
+    ["USD", "GBP", 0.79],
+    ["GBP", "USD", 1.26],
+    ["USD", "JPY", 147],
+    ["JPY", "USD", 0.0068],
+    ["USD", "CAD", 1.36],
+    ["CAD", "USD", 0.74],
+    ["USD", "AUD", 1.52],
+    ["AUD", "USD", 0.66],
+    ["USD", "CHF", 0.91],
+    ["CHF", "USD", 1.10],
+    ["USD", "CNY", 7.30],
+    ["CNY", "USD", 0.14],
+    ["USD", "MXN", 17],
+    ["MXN", "USD", 0.059],
+    ["USD", "BRL", 5],
+    ["BRL", "USD", 0.19],
+    ["USD", "ARS", 350],
+    ["ARS", "USD", 0.0028],
+
+
+    ["EUR", "COP", 4194],
+    ["COP", "EUR", 0.00024],
+    ["EUR", "GBP", 0.85],
+    ["GBP", "EUR", 1.18],
+    ["EUR", "JPY", 158],
+    ["JPY", "EUR", 0.0063],
+    ["EUR", "CAD", 1.46],
+    ["CAD", "EUR", 0.68],
+    ["EUR", "AUD", 1.64],
+    ["AUD", "EUR", 0.61],
+    ["EUR", "CHF", 0.98],
+    ["CHF", "EUR", 1.02],
+    ["EUR", "CNY", 7.85],
+    ["CNY", "EUR", 0.13],
+    ["EUR", "MXN", 18.28],
+    ["MXN", "EUR", 0.055],
+    ["EUR", "BRL", 5.38],
+    ["BRL", "EUR", 0.19],
+    ["EUR", "ARS", 376],
+    ["ARS", "EUR", 0.0027],
+
+
+    ["GBP", "COP", 4937],
+    ["COP", "GBP", 0.0002],
+    ["GBP", "JPY", 186],
+    ["JPY", "GBP", 0.0054],
+    ["GBP", "CAD", 1.72],
+    ["CAD", "GBP", 0.58],
+    ["GBP", "AUD", 1.92],
+    ["AUD", "GBP", 0.52],
+    ["GBP", "CHF", 1.15],
+    ["CHF", "GBP", 0.87],
+    ["GBP", "CNY", 9.24],
+    ["CNY", "GBP", 0.11],
+    ["GBP", "MXN", 21.5],
+    ["MXN", "GBP", 0.047],
+    ["GBP", "BRL", 6.32],
+    ["BRL", "GBP", 0.16],
+    ["GBP", "ARS", 443],
+    ["ARS", "GBP", 0.0023],
+
+
+    ["JPY", "COP", 26.5],
+    ["COP", "JPY", 0.038],
+    ["JPY", "CAD", 0.0092],
+    ["CAD", "JPY", 108],
+    ["JPY", "AUD", 0.0103],
+    ["AUD", "JPY", 97],
+    ["JPY", "CHF", 0.0062],
+    ["CHF", "JPY", 161],
+    ["JPY", "CNY", 0.05],
+    ["CNY", "JPY", 20],
+    ["JPY", "MXN", 0.116],
+    ["MXN", "JPY", 8.6],
+    ["JPY", "BRL", 0.034],
+    ["BRL", "JPY", 29.4],
+    ["JPY", "ARS", 2.38],
+    ["ARS", "JPY", 0.42],
+
+
+    ["CAD", "COP", 2868],
+    ["COP", "CAD", 0.00035],
+    ["CAD", "AUD", 1.12],
+    ["AUD", "CAD", 0.89],
+    ["CAD", "CHF", 0.67],
+    ["CHF", "CAD", 1.49],
+    ["CAD", "CNY", 5.37],
+    ["CNY", "CAD", 0.19],
+    ["CAD", "MXN", 12.5],
+    ["MXN", "CAD", 0.08],
+    ["CAD", "BRL", 3.68],
+    ["BRL", "CAD", 0.27],
+    ["CAD", "ARS", 257],
+    ["ARS", "CAD", 0.0039],
+
+
+    ["AUD", "COP", 2566],
+    ["COP", "AUD", 0.00039],
+    ["AUD", "CHF", 0.60],
+    ["CHF", "AUD", 1.67],
+    ["AUD", "CNY", 4.80],
+    ["CNY", "AUD", 0.21],
+    ["AUD", "MXN", 11.18],
+    ["MXN", "AUD", 0.089],
+    ["AUD", "BRL", 3.29],
+    ["BRL", "AUD", 0.30],
+    ["AUD", "ARS", 230],
+    ["ARS", "AUD", 0.0043],
+
+
+    ["CHF", "COP", 4286],
+    ["COP", "CHF", 0.00023],
+    ["CHF", "CNY", 8.02],
+    ["CNY", "CHF", 0.12],
+    ["CHF", "MXN", 18.68],
+    ["MXN", "CHF", 0.054],
+    ["CHF", "BRL", 5.49],
+    ["BRL", "CHF", 0.18],
+    ["CHF", "ARS", 385],
+    ["ARS", "CHF", 0.0026],
+
+    ["CNY", "COP", 534],
+    ["COP", "CNY", 0.0019],
+    ["CNY", "MXN", 2.33],
+    ["MXN", "CNY", 0.43],
+    ["CNY", "BRL", 0.68],
+    ["BRL", "CNY", 1.46],
+    ["CNY", "ARS", 47.9],
+    ["ARS", "CNY", 0.021],
+
+
+    ["MXN", "COP", 210.74],
+    ["COP", "MXN", 0.0047],
+    ["MXN", "BRL", 0.29],
+    ["BRL", "MXN", 3.4],
+    ["MXN", "ARS", 20.59],
+    ["ARS", "MXN", 0.049],
+
+
+    ["BRL", "COP", 780],
+    ["COP", "BRL", 0.0013],
+    ["BRL", "ARS", 70],
+    ["ARS", "BRL", 0.014],
+
+
+    ["ARS", "COP", 11.14],
+    ["COP", "ARS", 0.090]
+];
+
+
+export const tasas: TasaCambio[] = rawTasas.map(
+    ([origen, destino, valor]) => new TasaCambio(origen, destino, valor)
+);
