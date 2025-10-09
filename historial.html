@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Historial de Conversiones</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <div class="floating-shapes">
+    <div class="shape"></div>
+    <div class="shape"></div>
+    <div class="shape"></div>
+  </div>
+
+  <div class="container">
+    <!-- ================= INTERFAZ: Historial ================= -->
+    <div id="interfaz-historial">
+      <div class="header">
+        <h2 class="title">📊 Historial de Conversiones</h2>
+        <!-- 🔙 Vuelve al index -->
+        <button class="close-button" onclick="location.href='index.html'">✕</button>
+      </div>
+
+      <div class="history-controls">
+        <!-- Llama a limpiarHistorial() -->
+        <button class="clear-history-button" onclick="limpiarHistorial()">
+          🗑️ Limpiar Historial
+        </button>
+      </div>
+
+      <div class="history-list" id="listaHistorialHtml">
+        (Todavía no hay conversiones)
+      </div>
+    </div>
+  </div>
+
+  <!-- Script compilado -->
+  <script type="module" src="dist/Script.js"></script>
+</body>
+</html>
