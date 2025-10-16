@@ -6,9 +6,8 @@ import type { MonedaCodigo } from "./models/Tipos.js";
 const historial = new Historial();
 const gestorTasas = new GestorTasas();
 
-
 async function actualizarTasas(): Promise<void> {
-  const btnActualizar = document.getElementById("btnActualizarTasas") as HTMLElement;
+  const btnActualizar = document.getElementById("btnActualizarTasas") as HTMLButtonElement;
   if (btnActualizar) {
     btnActualizar.innerText = "Actualizando...";
     btnActualizar.disabled = true;
@@ -18,16 +17,16 @@ async function actualizarTasas(): Promise<void> {
 
   if (btnActualizar) {
     if (exito) {
-      btnActualizar.innerText = "✅ Actualizado";
+      btnActualizar.innerText = " Actualizado";
       setTimeout(() => {
-        btnActualizar.innerText = "🔄 Actualizar Tasas";
+        btnActualizar.innerText = " Actualizar Tasas";
         btnActualizar.disabled = false;
       }, 2000);
     } else {
-      btnActualizar.innerText = "❌ Error en actualización";
+      btnActualizar.innerText = " Error en actualización";
       btnActualizar.disabled = false;
       setTimeout(() => {
-        btnActualizar.innerText = "🔄 Actualizar Tasas";
+        btnActualizar.innerText = " Actualizar Tasas";
       }, 3000);
     }
   }
@@ -84,8 +83,8 @@ function mostrarHistorial(): void {
 }
 
 function mostrarConversor(): void {
-  document.getElementById("interfaz-conversor")!.style.display = "block";
-  document.getElementById("interfaz-historial")!.style.display = "none";
+  (document.getElementById("interfaz-conversor") as HTMLElement).style.display = "block";
+  (document.getElementById("interfaz-historial") as HTMLElement).style.display = "none";
 }
 
 function limpiarHistorial(): void {
@@ -111,6 +110,7 @@ function cerrarHistorial(): void {
   const modal = document.getElementById("modalHistorial") as HTMLElement;
   modal.style.display = "none";
 }
+
 
 (window as any).convertir = convertir;
 (window as any).intercambiar = intercambiar;
