@@ -1,6 +1,7 @@
 import { ConversorMoneda } from "./models/ConversorMoneda.js";
 import { tasas } from "./models/Tasas.js";
 import { Historial } from "./models/Historial.js";
+// ✅ Se crea UNA SOLA INSTANCIA que persiste en ambas páginas gracias a localStorage
 const historial = new Historial();
 function convertir() {
     const monto = parseFloat(document.getElementById("cantidadOrigen").value);
@@ -17,9 +18,10 @@ function convertir() {
     const texto = document.getElementById("textoResultado");
     const tasaTxt = document.getElementById("tasaResultado");
     if (resultado > 0) {
-        texto.innerText = `${monto} ${origen} = ${resultado} ${destino}`;
+        texto.innerText = `${monto} ${origen} = ${resultado.toFixed(2)} ${destino}`;
         tasaTxt.innerText = "Conversión realizada con éxito.";
-        historial.agregar(`${monto} ${origen} = ${resultado} ${destino} (${new Date().toLocaleString()})`);
+        // ✅ AQUÍ se guarda en localStorage automáticamente
+        historial.agregar(`${monto} ${origen} = ${resultado.toFixed(2)} ${destino} (${new Date().toLocaleString()})`);
     }
     else {
         texto.innerText = "No hay tasa para esta conversión.";
@@ -27,8 +29,15 @@ function convertir() {
     }
 }
 function mostrarHistorial() {
-    document.getElementById("interfaz-conversor").style.display = "none";
-    document.getElementById("interfaz-historial").style.display = "block";
+    // Solo mostrar si estamos en historial.html
+    const interfazHistorial = document.getElementById("interfaz-historial");
+    const interfazConversor = document.getElementById("interfaz-conversor");
+    if (interfazHistorial) {
+        interfazHistorial.style.display = "block";
+    }
+    if (interfazConversor) {
+        interfazConversor.style.display = "none";
+    }
     const lista = document.getElementById("listaHistorialHtml");
     const registros = historial.listar();
     if (registros.length > 0) {
@@ -62,6 +71,7 @@ function cerrarHistorial() {
     const modal = document.getElementById("modalHistorial");
     modal.style.display = "none";
 }
+// ✅ Exponer todas las funciones al window para que el HTML las pueda usar
 window.convertir = convertir;
 window.intercambiar = intercambiar;
 window.abrirHistorial = abrirHistorial;

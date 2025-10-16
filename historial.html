@@ -32,12 +32,22 @@
       </div>
 
       <div class="history-list" id="listaHistorialHtml">
-        (Todavía no hay conversiones)
+        (Cargando...)
       </div>
     </div>
   </div>
 
   <!-- Script compilado -->
   <script type="module" src="dist/Script.js"></script>
+  
+  <!-- Script para inicializar el historial cuando carga la página -->
+  <script>
+    // Espera a que cargue el Script.js
+    window.addEventListener('load', () => {
+      if (typeof mostrarHistorial === 'function') {
+        mostrarHistorial();
+      }
+    });
+  </script>
 </body>
 </html>

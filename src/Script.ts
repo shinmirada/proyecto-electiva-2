@@ -1,9 +1,37 @@
 import { ConversorMoneda } from "./models/ConversorMoneda.js";
-import { tasas } from "./models/Tasas.js";
 import { Historial } from "./models/Historial.js";
+import { GestorTasas } from "./models/Gestortasas.js";
 import type { MonedaCodigo } from "./models/Tipos.js";
 
 const historial = new Historial();
+const gestorTasas = new GestorTasas();
+
+
+async function actualizarTasas(): Promise<void> {
+  const btnActualizar = document.getElementById("btnActualizarTasas") as HTMLElement;
+  if (btnActualizar) {
+    btnActualizar.innerText = "Actualizando...";
+    btnActualizar.disabled = true;
+  }
+
+  const exito = await gestorTasas.actualizarManual();
+
+  if (btnActualizar) {
+    if (exito) {
+      btnActualizar.innerText = "✅ Actualizado";
+      setTimeout(() => {
+        btnActualizar.innerText = "🔄 Actualizar Tasas";
+        btnActualizar.disabled = false;
+      }, 2000);
+    } else {
+      btnActualizar.innerText = "❌ Error en actualización";
+      btnActualizar.disabled = false;
+      setTimeout(() => {
+        btnActualizar.innerText = "🔄 Actualizar Tasas";
+      }, 3000);
+    }
+  }
+}
 
 function convertir(): void {
   const monto = parseFloat((document.getElementById("cantidadOrigen") as HTMLInputElement).value);
@@ -18,44 +46,47 @@ function convertir(): void {
     return;
   }
 
-  const resultado = conversor.convertir(tasas);
-  (document.getElementById("cantidadDestino") as HTMLInputElement).value = resultado.toString();
+  const resultado = conversor.convertir(gestorTasas.obtener());
+  (document.getElementById("cantidadDestino") as HTMLInputElement).value = resultado.toFixed(2);
 
   const texto = document.getElementById("textoResultado") as HTMLElement;
   const tasaTxt = document.getElementById("tasaResultado") as HTMLElement;
 
   if (resultado > 0) {
-    texto.innerText = `${monto} ${origen} = ${resultado} ${destino}`;
+    texto.innerText = `${monto} ${origen} = ${resultado.toFixed(2)} ${destino}`;
     tasaTxt.innerText = "Conversión realizada con éxito.";
-    historial.agregar(`${monto} ${origen} = ${resultado} ${destino} (${new Date().toLocaleString()})`);
-
+    historial.agregar(`${monto} ${origen} = ${resultado.toFixed(2)} ${destino} (${new Date().toLocaleString()})`);
   } else {
     texto.innerText = "No hay tasa para esta conversión.";
     tasaTxt.innerText = "";
   }
 }
 
-
 function mostrarHistorial(): void {
-  document.getElementById("interfaz-conversor")!.style.display = "none";
-  document.getElementById("interfaz-historial")!.style.display = "block";
+  const interfazHistorial = document.getElementById("interfaz-historial");
+  const interfazConversor = document.getElementById("interfaz-conversor");
+  
+  if (interfazHistorial) {
+    interfazHistorial.style.display = "block";
+  }
+  if (interfazConversor) {
+    interfazConversor.style.display = "none";
+  }
 
   const lista = document.getElementById("listaHistorialHtml") as HTMLElement;
-  const registros = historial.listar()
+  const registros = historial.listar();
 
   if (registros.length > 0) {
     lista.innerText = registros.join("\n");
   } else {
     lista.innerText = "Todavía no hay conversiones.";
   }
-
 }
 
 function mostrarConversor(): void {
   document.getElementById("interfaz-conversor")!.style.display = "block";
   document.getElementById("interfaz-historial")!.style.display = "none";
 }
-
 
 function limpiarHistorial(): void {
   historial.limpiar();
@@ -81,7 +112,6 @@ function cerrarHistorial(): void {
   modal.style.display = "none";
 }
 
-
 (window as any).convertir = convertir;
 (window as any).intercambiar = intercambiar;
 (window as any).abrirHistorial = abrirHistorial;
@@ -89,3 +119,4 @@ function cerrarHistorial(): void {
 (window as any).limpiarHistorial = limpiarHistorial;
 (window as any).mostrarHistorial = mostrarHistorial;
 (window as any).mostrarConversor = mostrarConversor;
+(window as any).actualizarTasas = actualizarTasas;
