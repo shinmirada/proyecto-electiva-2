@@ -1,8 +1,43 @@
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 import { ConversorMoneda } from "./models/ConversorMoneda.js";
-import { tasas } from "./models/Tasas.js";
 import { Historial } from "./models/Historial.js";
-// ✅ Se crea UNA SOLA INSTANCIA que persiste en ambas páginas gracias a localStorage
+import { GestorTasas } from "./models/Gestortasas.js";
 const historial = new Historial();
+const gestorTasas = new GestorTasas();
+function actualizarTasas() {
+    return __awaiter(this, void 0, void 0, function* () {
+        const btnActualizar = document.getElementById("btnActualizarTasas");
+        if (btnActualizar) {
+            btnActualizar.innerText = "Actualizando...";
+            btnActualizar.disabled = true;
+        }
+        const exito = yield gestorTasas.actualizarManual();
+        if (btnActualizar) {
+            if (exito) {
+                btnActualizar.innerText = " Actualizado";
+                setTimeout(() => {
+                    btnActualizar.innerText = " Actualizar Tasas";
+                    btnActualizar.disabled = false;
+                }, 2000);
+            }
+            else {
+                btnActualizar.innerText = " Error en actualización";
+                btnActualizar.disabled = false;
+                setTimeout(() => {
+                    btnActualizar.innerText = " Actualizar Tasas";
+                }, 3000);
+            }
+        }
+    });
+}
 function convertir() {
     const monto = parseFloat(document.getElementById("cantidadOrigen").value);
     const origen = document.getElementById("monedaOrigen").value;
@@ -13,14 +48,13 @@ function convertir() {
         document.getElementById("tasaResultado").innerText = "";
         return;
     }
-    const resultado = conversor.convertir(tasas);
-    document.getElementById("cantidadDestino").value = resultado.toString();
+    const resultado = conversor.convertir(gestorTasas.obtener());
+    document.getElementById("cantidadDestino").value = resultado.toFixed(2);
     const texto = document.getElementById("textoResultado");
     const tasaTxt = document.getElementById("tasaResultado");
     if (resultado > 0) {
         texto.innerText = `${monto} ${origen} = ${resultado.toFixed(2)} ${destino}`;
         tasaTxt.innerText = "Conversión realizada con éxito.";
-        // ✅ AQUÍ se guarda en localStorage automáticamente
         historial.agregar(`${monto} ${origen} = ${resultado.toFixed(2)} ${destino} (${new Date().toLocaleString()})`);
     }
     else {
@@ -29,7 +63,6 @@ function convertir() {
     }
 }
 function mostrarHistorial() {
-    // Solo mostrar si estamos en historial.html
     const interfazHistorial = document.getElementById("interfaz-historial");
     const interfazConversor = document.getElementById("interfaz-conversor");
     if (interfazHistorial) {
@@ -71,7 +104,6 @@ function cerrarHistorial() {
     const modal = document.getElementById("modalHistorial");
     modal.style.display = "none";
 }
-// ✅ Exponer todas las funciones al window para que el HTML las pueda usar
 window.convertir = convertir;
 window.intercambiar = intercambiar;
 window.abrirHistorial = abrirHistorial;
@@ -79,3 +111,4 @@ window.cerrarHistorial = cerrarHistorial;
 window.limpiarHistorial = limpiarHistorial;
 window.mostrarHistorial = mostrarHistorial;
 window.mostrarConversor = mostrarConversor;
+window.actualizarTasas = actualizarTasas;
