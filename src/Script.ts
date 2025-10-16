@@ -3,6 +3,7 @@ import { tasas } from "./models/Tasas.js";
 import { Historial } from "./models/Historial.js";
 import type { MonedaCodigo } from "./models/Tipos.js";
 
+// ✅ Se crea UNA SOLA INSTANCIA que persiste en ambas páginas gracias a localStorage
 const historial = new Historial();
 
 function convertir(): void {
@@ -25,37 +26,42 @@ function convertir(): void {
   const tasaTxt = document.getElementById("tasaResultado") as HTMLElement;
 
   if (resultado > 0) {
-    texto.innerText = `${monto} ${origen} = ${resultado} ${destino}`;
+    texto.innerText = `${monto} ${origen} = ${resultado.toFixed(2)} ${destino}`;
     tasaTxt.innerText = "Conversión realizada con éxito.";
-    historial.agregar(`${monto} ${origen} = ${resultado} ${destino} (${new Date().toLocaleString()})`);
-
+    // ✅ AQUÍ se guarda en localStorage automáticamente
+    historial.agregar(`${monto} ${origen} = ${resultado.toFixed(2)} ${destino} (${new Date().toLocaleString()})`);
   } else {
     texto.innerText = "No hay tasa para esta conversión.";
     tasaTxt.innerText = "";
   }
 }
 
-
 function mostrarHistorial(): void {
-  document.getElementById("interfaz-conversor")!.style.display = "none";
-  document.getElementById("interfaz-historial")!.style.display = "block";
+  // Solo mostrar si estamos en historial.html
+  const interfazHistorial = document.getElementById("interfaz-historial");
+  const interfazConversor = document.getElementById("interfaz-conversor");
+  
+  if (interfazHistorial) {
+    interfazHistorial.style.display = "block";
+  }
+  if (interfazConversor) {
+    interfazConversor.style.display = "none";
+  }
 
   const lista = document.getElementById("listaHistorialHtml") as HTMLElement;
-  const registros = historial.listar()
+  const registros = historial.listar();
 
   if (registros.length > 0) {
     lista.innerText = registros.join("\n");
   } else {
     lista.innerText = "Todavía no hay conversiones.";
   }
-
 }
 
 function mostrarConversor(): void {
   document.getElementById("interfaz-conversor")!.style.display = "block";
   document.getElementById("interfaz-historial")!.style.display = "none";
 }
-
 
 function limpiarHistorial(): void {
   historial.limpiar();
@@ -81,7 +87,7 @@ function cerrarHistorial(): void {
   modal.style.display = "none";
 }
 
-
+// ✅ Exponer todas las funciones al window para que el HTML las pueda usar
 (window as any).convertir = convertir;
 (window as any).intercambiar = intercambiar;
 (window as any).abrirHistorial = abrirHistorial;
