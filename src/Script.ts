@@ -1,10 +1,37 @@
 import { ConversorMoneda } from "./models/ConversorMoneda.js";
-import { tasas } from "./models/Tasas.js";
 import { Historial } from "./models/Historial.js";
+import { GestorTasas } from "./models/Gestortasas.js";
 import type { MonedaCodigo } from "./models/Tipos.js";
 
-// ✅ Se crea UNA SOLA INSTANCIA que persiste en ambas páginas gracias a localStorage
 const historial = new Historial();
+const gestorTasas = new GestorTasas();
+
+
+async function actualizarTasas(): Promise<void> {
+  const btnActualizar = document.getElementById("btnActualizarTasas") as HTMLElement;
+  if (btnActualizar) {
+    btnActualizar.innerText = "Actualizando...";
+    btnActualizar.disabled = true;
+  }
+
+  const exito = await gestorTasas.actualizarManual();
+
+  if (btnActualizar) {
+    if (exito) {
+      btnActualizar.innerText = "✅ Actualizado";
+      setTimeout(() => {
+        btnActualizar.innerText = "🔄 Actualizar Tasas";
+        btnActualizar.disabled = false;
+      }, 2000);
+    } else {
+      btnActualizar.innerText = "❌ Error en actualización";
+      btnActualizar.disabled = false;
+      setTimeout(() => {
+        btnActualizar.innerText = "🔄 Actualizar Tasas";
+      }, 3000);
+    }
+  }
+}
 
 function convertir(): void {
   const monto = parseFloat((document.getElementById("cantidadOrigen") as HTMLInputElement).value);
@@ -19,8 +46,8 @@ function convertir(): void {
     return;
   }
 
-  const resultado = conversor.convertir(tasas);
-  (document.getElementById("cantidadDestino") as HTMLInputElement).value = resultado.toString();
+  const resultado = conversor.convertir(gestorTasas.obtener());
+  (document.getElementById("cantidadDestino") as HTMLInputElement).value = resultado.toFixed(2);
 
   const texto = document.getElementById("textoResultado") as HTMLElement;
   const tasaTxt = document.getElementById("tasaResultado") as HTMLElement;
@@ -28,7 +55,6 @@ function convertir(): void {
   if (resultado > 0) {
     texto.innerText = `${monto} ${origen} = ${resultado.toFixed(2)} ${destino}`;
     tasaTxt.innerText = "Conversión realizada con éxito.";
-    // ✅ AQUÍ se guarda en localStorage automáticamente
     historial.agregar(`${monto} ${origen} = ${resultado.toFixed(2)} ${destino} (${new Date().toLocaleString()})`);
   } else {
     texto.innerText = "No hay tasa para esta conversión.";
@@ -37,7 +63,6 @@ function convertir(): void {
 }
 
 function mostrarHistorial(): void {
-  // Solo mostrar si estamos en historial.html
   const interfazHistorial = document.getElementById("interfaz-historial");
   const interfazConversor = document.getElementById("interfaz-conversor");
   
@@ -87,7 +112,6 @@ function cerrarHistorial(): void {
   modal.style.display = "none";
 }
 
-// ✅ Exponer todas las funciones al window para que el HTML las pueda usar
 (window as any).convertir = convertir;
 (window as any).intercambiar = intercambiar;
 (window as any).abrirHistorial = abrirHistorial;
@@ -95,3 +119,4 @@ function cerrarHistorial(): void {
 (window as any).limpiarHistorial = limpiarHistorial;
 (window as any).mostrarHistorial = mostrarHistorial;
 (window as any).mostrarConversor = mostrarConversor;
+(window as any).actualizarTasas = actualizarTasas;
