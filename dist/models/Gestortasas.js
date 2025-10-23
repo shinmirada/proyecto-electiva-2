@@ -7,17 +7,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import { TasaCambio } from "./TasaCambio.js";
 export class GestorTasas {
     constructor() {
-        this.tasas = [];
+        this.tasas = {};
+        this.base = "USD";
         this.ultimaActualizacion = null;
+        this.cargandoDelServidor = false;
         this.API_URL = "https://api.exchangerate-api.com/v4/latest";
         this.CACHE_KEY = "tasas_cache";
         this.TIMESTAMP_KEY = "tasas_timestamp";
         this.CACHE_DURATION = 60 * 60 * 1000;
-        this.cargandoDelServidor = false;
-        this.tasas = [];
         this.inicializarTasas();
     }
     inicializarTasas() {
@@ -25,41 +24,43 @@ export class GestorTasas {
             const cached = this.obtenerDelCache();
             if (cached) {
                 this.tasas = cached;
-                console.log(" Tasas cargadas del caché");
+                console.log(" Tasas cargadas desde caché local.");
                 this.actualizarEnBackground();
-                return;
             }
-            console.log(" Sin caché, actualizando desde API...");
-            yield this.actualizarDesdeAPI();
+            else {
+                console.log(" Sin caché disponible, obteniendo desde API...");
+                yield this.actualizarDesdeAPI();
+            }
         });
     }
     actualizarDesdeAPI() {
-        return __awaiter(this, void 0, void 0, function* () {
+        return __awaiter(this, arguments, void 0, function* (base = "USD") {
             if (this.cargandoDelServidor) {
-                console.log(" Ya hay una actualización en proceso...");
+                console.log(" Ya hay una actualización en curso.");
                 return false;
             }
             this.cargandoDelServidor = true;
             try {
-                console.log(" Actualizando tasas desde API...");
-                const response = yield fetch(`${this.API_URL}/USD`);
+                console.log(`Obteniendo tasas desde API con base ${base}...`);
+                const response = yield fetch(`${this.API_URL}/${base}`);
                 if (!response.ok)
-                    throw new Error(`Error HTTP: ${response.status}`);
-                const datos = yield response.json();
-                if (!datos.rates)
-                    throw new Error("Respuesta API inválida");
-                this.procesarRespuestaAPI(datos.rates);
-                this.guardarEnCache();
+                    throw new Error(`Error HTTP ${response.status}`);
+                const data = yield response.json();
+                if (!data.rates)
+                    throw new Error("Respuesta inválida de la API");
+                this.tasas = data.rates;
+                this.base = data.base || base;
                 this.ultimaActualizacion = new Date();
-                console.log(" Tasas actualizadas exitosamente");
+                this.guardarEnCache();
+                console.log(" Tasas actualizadas correctamente desde la API.");
                 return true;
             }
             catch (error) {
-                console.error(" Error actualizando desde API:", error);
-                const cachedViejo = this.obtenerDelCacheAnciano();
-                if (cachedViejo) {
-                    this.tasas = cachedViejo;
-                    console.log(" Usando tasas antiguas del caché");
+                console.error(" Error al actualizar desde API:", error);
+                const cacheAntiguo = this.obtenerDelCacheAntiguo();
+                if (cacheAntiguo) {
+                    this.tasas = cacheAntiguo;
+                    console.log(" Usando tasas antiguas del caché.");
                 }
                 return false;
             }
@@ -71,71 +72,65 @@ export class GestorTasas {
     actualizarEnBackground() {
         return __awaiter(this, void 0, void 0, function* () {
             setTimeout(() => __awaiter(this, void 0, void 0, function* () {
-                const cached = this.obtenerDelCache();
-                if (!cached) {
-                    yield this.actualizarDesdeAPI();
-                }
+                yield this.actualizarDesdeAPI(this.base);
             }), 500);
         });
     }
-    procesarRespuestaAPI(rates) {
-        const nuevasTasas = [];
-        Object.entries(rates).forEach(([moneda, tasa]) => {
-            if (typeof tasa === "number" && tasa > 0) {
-                nuevasTasas.push(new TasaCambio("USD", moneda, tasa));
-                nuevasTasas.push(new TasaCambio(moneda, "USD", 1 / tasa));
-            }
-        });
-        this.tasas = nuevasTasas;
-    }
     guardarEnCache() {
-        const datosSerializados = this.tasas.map(t => ({
-            origen: t.origen,
-            destino: t.destino,
-            valor: t.valor
-        }));
-        localStorage.setItem(this.CACHE_KEY, JSON.stringify(datosSerializados));
-        localStorage.setItem(this.TIMESTAMP_KEY, new Date().getTime().toString());
+        localStorage.setItem(this.CACHE_KEY, JSON.stringify(this.tasas));
+        localStorage.setItem(this.TIMESTAMP_KEY, Date.now().toString());
     }
     obtenerDelCache() {
-        const datosCache = localStorage.getItem(this.CACHE_KEY);
+        const cache = localStorage.getItem(this.CACHE_KEY);
         const timestamp = localStorage.getItem(this.TIMESTAMP_KEY);
-        if (!datosCache || !timestamp)
+        if (!cache || !timestamp)
             return null;
-        const ahora = new Date().getTime();
-        const tiempoTranscurrido = ahora - parseInt(timestamp);
-        if (tiempoTranscurrido > this.CACHE_DURATION) {
-            console.log(" Caché expirado (más de 1 hora)");
+        const ahora = Date.now();
+        const diferencia = ahora - parseInt(timestamp);
+        if (diferencia > this.CACHE_DURATION) {
+            console.log(" Caché expirado (más de 1 hora).");
             return null;
         }
         try {
-            const datos = JSON.parse(datosCache);
-            const minutosRestantes = Math.floor((this.CACHE_DURATION - tiempoTranscurrido) / 60000);
-            console.log(` Caché válido (${minutosRestantes} min restantes)`);
-            return datos.map((t) => new TasaCambio(t.origen, t.destino, t.valor));
+            const datos = JSON.parse(cache);
+            const minutosRestantes = Math.floor((this.CACHE_DURATION - diferencia) / 60000);
+            console.log(` Caché válido (${minutosRestantes} min restantes).`);
+            return datos;
         }
         catch (_a) {
             return null;
         }
     }
-    obtenerDelCacheAnciano() {
-        const datosCache = localStorage.getItem(this.CACHE_KEY);
-        if (!datosCache)
+    obtenerDelCacheAntiguo() {
+        const cache = localStorage.getItem(this.CACHE_KEY);
+        if (!cache)
             return null;
         try {
-            const datos = JSON.parse(datosCache);
-            return datos.map((t) => new TasaCambio(t.origen, t.destino, t.valor));
+            return JSON.parse(cache);
         }
         catch (_a) {
             return null;
         }
     }
     obtener() {
-        return this.tasas;
-    }
-    actualizarManual() {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield this.actualizarDesdeAPI();
+            if (Object.keys(this.tasas).length === 0) {
+                yield this.actualizarDesdeAPI(this.base);
+            }
+            return this.tasas;
+        });
+    }
+    obtenerTasa(origen, destino) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const tasas = yield this.obtener();
+            if (origen === destino)
+                return 1;
+            const tasaOrigen = tasas[origen];
+            const tasaDestino = tasas[destino];
+            if (!tasaOrigen || !tasaDestino) {
+                throw new Error(`No se encontró una o ambas monedas: ${origen}, ${destino}`);
+            }
+            return tasaDestino / tasaOrigen;
         });
     }
     getUltimaActualizacion() {
