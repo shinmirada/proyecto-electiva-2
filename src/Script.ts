@@ -6,6 +6,7 @@ import type { MonedaCodigo } from "./models/Tipos.js";
 const historial = new Historial();
 const gestorTasas = new GestorTasas();
 
+
 async function actualizarTasas(): Promise<void> {
   const btnActualizar = document.getElementById("btnActualizarTasas") as HTMLButtonElement;
   if (btnActualizar) {
@@ -13,26 +14,27 @@ async function actualizarTasas(): Promise<void> {
     btnActualizar.disabled = true;
   }
 
-  const exito = await gestorTasas.actualizarManual();
+  const exito = await gestorTasas.actualizarDesdeAPI();
 
   if (btnActualizar) {
     if (exito) {
       btnActualizar.innerText = " Actualizado";
       setTimeout(() => {
-        btnActualizar.innerText = " Actualizar Tasas";
+        btnActualizar.innerText = "Actualizar Tasas";
         btnActualizar.disabled = false;
       }, 2000);
     } else {
-      btnActualizar.innerText = " Error en actualización";
+      btnActualizar.innerText = " Error al actualizar";
       btnActualizar.disabled = false;
       setTimeout(() => {
-        btnActualizar.innerText = " Actualizar Tasas";
+        btnActualizar.innerText = "Actualizar Tasas";
       }, 3000);
     }
   }
 }
 
-function convertir(): void {
+
+async function convertir(): Promise<void> {
   const monto = parseFloat((document.getElementById("cantidadOrigen") as HTMLInputElement).value);
   const origen = (document.getElementById("monedaOrigen") as HTMLSelectElement).value as MonedaCodigo;
   const destino = (document.getElementById("monedaDestino") as HTMLSelectElement).value as MonedaCodigo;
@@ -45,52 +47,53 @@ function convertir(): void {
     return;
   }
 
-  const resultado = conversor.convertir(gestorTasas.obtener());
-  (document.getElementById("cantidadDestino") as HTMLInputElement).value = resultado.toFixed(2);
+  try {
+ 
+    const tasa = await gestorTasas.obtenerTasa(origen, destino);
+    const resultado = monto * tasa;
 
-  const texto = document.getElementById("textoResultado") as HTMLElement;
-  const tasaTxt = document.getElementById("tasaResultado") as HTMLElement;
+    (document.getElementById("cantidadDestino") as HTMLInputElement).value = resultado.toFixed(2);
 
-  if (resultado > 0) {
+    const texto = document.getElementById("textoResultado") as HTMLElement;
+    const tasaTxt = document.getElementById("tasaResultado") as HTMLElement;
+
     texto.innerText = `${monto} ${origen} = ${resultado.toFixed(2)} ${destino}`;
-    tasaTxt.innerText = "Conversión realizada con éxito.";
+    tasaTxt.innerText = `Tasa usada: ${tasa.toFixed(4)}`;
+
     historial.agregar(`${monto} ${origen} = ${resultado.toFixed(2)} ${destino} (${new Date().toLocaleString()})`);
-  } else {
-    texto.innerText = "No hay tasa para esta conversión.";
-    tasaTxt.innerText = "";
+  } catch (error) {
+    console.error(error);
+    (document.getElementById("textoResultado") as HTMLElement).innerText = "No se pudo obtener la tasa de cambio.";
+    (document.getElementById("tasaResultado") as HTMLElement).innerText = "";
   }
 }
+
 
 function mostrarHistorial(): void {
   const interfazHistorial = document.getElementById("interfaz-historial");
   const interfazConversor = document.getElementById("interfaz-conversor");
-  
-  if (interfazHistorial) {
-    interfazHistorial.style.display = "block";
-  }
-  if (interfazConversor) {
-    interfazConversor.style.display = "none";
-  }
+
+  if (interfazHistorial) interfazHistorial.style.display = "block";
+  if (interfazConversor) interfazConversor.style.display = "none";
 
   const lista = document.getElementById("listaHistorialHtml") as HTMLElement;
   const registros = historial.listar();
 
-  if (registros.length > 0) {
-    lista.innerText = registros.join("\n");
-  } else {
-    lista.innerText = "Todavía no hay conversiones.";
-  }
+  lista.innerText = registros.length > 0 ? registros.join("\n") : "Todavía no hay conversiones.";
 }
+
 
 function mostrarConversor(): void {
   (document.getElementById("interfaz-conversor") as HTMLElement).style.display = "block";
   (document.getElementById("interfaz-historial") as HTMLElement).style.display = "none";
 }
 
+
 function limpiarHistorial(): void {
   historial.limpiar();
   mostrarHistorial();
 }
+
 
 function intercambiar(): void {
   const origen = document.getElementById("monedaOrigen") as HTMLSelectElement;

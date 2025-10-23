@@ -20,7 +20,7 @@
     <div id="interfaz-conversor">
       <div class="header">
         <h1 class="title">💱 Conversor</h1>
-        <p class="subtitle">Convierte monedas al instante</p>
+        <p class="subtitle">Convierte monedas al instante con tasas reales</p>
       </div>
 
       <!-- El formulario llama a convertir() -->
@@ -49,7 +49,7 @@
 
         <div class="swap-container">
           <!-- Llama a intercambiar() -->
-          <button type="button" class="swap-button" onclick="intercambiar()">
+          <button type="button" class="swap-button" onclick="intercambiar()" title="Intercambiar monedas">
             <span class="swap-icon">⇄</span>
           </button>
         </div>
@@ -76,27 +76,25 @@
         </div>
 
         <div class="button-group">
-          <!-- Botón convertir existente -->
+          <!-- Botón convertir principal -->
           <button type="submit" class="convert-button">
-            <span class="button-text">Convertir Ahora</span>
-            <span class="button-icon">💰</span>
+            <span class="button-text">💰 Convertir Ahora</span>
           </button>
 
-          <!-- Nuevo botón: Actualizar Tasas -->
+          <!-- Botón actualizar tasas desde API -->
           <button type="button" class="update-button" id="btnActualizarTasas" onclick="actualizarTasas()">
             <span class="button-text">🔄 Actualizar Tasas</span>
           </button>
 
-          <!-- Botón historial existente -->
+          <!-- Botón ver historial -->
           <button type="button" class="history-button" onclick="location.href='historial.html'">
-            <span class="button-text">Ver Historial</span>
-            <span class="button-icon">📊</span>
+            <span class="button-text">📊 Ver Historial</span>
           </button>
         </div>
       </form>
 
       <div class="result-container" id="contenedorResultado">
-        <div class="result-text" id="textoResultado">No hay resultado todavía</div>
+        <div class="result-text" id="textoResultado">Ingresa un monto y presiona "Convertir Ahora"</div>
         <div class="result-rate" id="tasaResultado"></div>
       </div>
     </div>

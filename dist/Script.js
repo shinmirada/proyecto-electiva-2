@@ -19,66 +19,63 @@ function actualizarTasas() {
             btnActualizar.innerText = "Actualizando...";
             btnActualizar.disabled = true;
         }
-        const exito = yield gestorTasas.actualizarManual();
+        const exito = yield gestorTasas.actualizarDesdeAPI();
         if (btnActualizar) {
             if (exito) {
                 btnActualizar.innerText = " Actualizado";
                 setTimeout(() => {
-                    btnActualizar.innerText = " Actualizar Tasas";
+                    btnActualizar.innerText = "Actualizar Tasas";
                     btnActualizar.disabled = false;
                 }, 2000);
             }
             else {
-                btnActualizar.innerText = " Error en actualización";
+                btnActualizar.innerText = " Error al actualizar";
                 btnActualizar.disabled = false;
                 setTimeout(() => {
-                    btnActualizar.innerText = " Actualizar Tasas";
+                    btnActualizar.innerText = "Actualizar Tasas";
                 }, 3000);
             }
         }
     });
 }
 function convertir() {
-    const monto = parseFloat(document.getElementById("cantidadOrigen").value);
-    const origen = document.getElementById("monedaOrigen").value;
-    const destino = document.getElementById("monedaDestino").value;
-    const conversor = new ConversorMoneda(monto, origen, destino);
-    if (!conversor.validarEntrada()) {
-        document.getElementById("textoResultado").innerText = "Ingresa un monto válido.";
-        document.getElementById("tasaResultado").innerText = "";
-        return;
-    }
-    const resultado = conversor.convertir(gestorTasas.obtener());
-    document.getElementById("cantidadDestino").value = resultado.toFixed(2);
-    const texto = document.getElementById("textoResultado");
-    const tasaTxt = document.getElementById("tasaResultado");
-    if (resultado > 0) {
-        texto.innerText = `${monto} ${origen} = ${resultado.toFixed(2)} ${destino}`;
-        tasaTxt.innerText = "Conversión realizada con éxito.";
-        historial.agregar(`${monto} ${origen} = ${resultado.toFixed(2)} ${destino} (${new Date().toLocaleString()})`);
-    }
-    else {
-        texto.innerText = "No hay tasa para esta conversión.";
-        tasaTxt.innerText = "";
-    }
+    return __awaiter(this, void 0, void 0, function* () {
+        const monto = parseFloat(document.getElementById("cantidadOrigen").value);
+        const origen = document.getElementById("monedaOrigen").value;
+        const destino = document.getElementById("monedaDestino").value;
+        const conversor = new ConversorMoneda(monto, origen, destino);
+        if (!conversor.validarEntrada()) {
+            document.getElementById("textoResultado").innerText = "Ingresa un monto válido.";
+            document.getElementById("tasaResultado").innerText = "";
+            return;
+        }
+        try {
+            const tasa = yield gestorTasas.obtenerTasa(origen, destino);
+            const resultado = monto * tasa;
+            document.getElementById("cantidadDestino").value = resultado.toFixed(2);
+            const texto = document.getElementById("textoResultado");
+            const tasaTxt = document.getElementById("tasaResultado");
+            texto.innerText = `${monto} ${origen} = ${resultado.toFixed(2)} ${destino}`;
+            tasaTxt.innerText = `Tasa usada: ${tasa.toFixed(4)}`;
+            historial.agregar(`${monto} ${origen} = ${resultado.toFixed(2)} ${destino} (${new Date().toLocaleString()})`);
+        }
+        catch (error) {
+            console.error(error);
+            document.getElementById("textoResultado").innerText = "No se pudo obtener la tasa de cambio.";
+            document.getElementById("tasaResultado").innerText = "";
+        }
+    });
 }
 function mostrarHistorial() {
     const interfazHistorial = document.getElementById("interfaz-historial");
     const interfazConversor = document.getElementById("interfaz-conversor");
-    if (interfazHistorial) {
+    if (interfazHistorial)
         interfazHistorial.style.display = "block";
-    }
-    if (interfazConversor) {
+    if (interfazConversor)
         interfazConversor.style.display = "none";
-    }
     const lista = document.getElementById("listaHistorialHtml");
     const registros = historial.listar();
-    if (registros.length > 0) {
-        lista.innerText = registros.join("\n");
-    }
-    else {
-        lista.innerText = "Todavía no hay conversiones.";
-    }
+    lista.innerText = registros.length > 0 ? registros.join("\n") : "Todavía no hay conversiones.";
 }
 function mostrarConversor() {
     document.getElementById("interfaz-conversor").style.display = "block";

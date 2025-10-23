@@ -20,19 +20,23 @@
     <div id="interfaz-historial">
       <div class="header">
         <h2 class="title">📊 Historial de Conversiones</h2>
-        <!-- 🔙 Vuelve al index -->
-        <button class="close-button" onclick="location.href='index.html'">✕</button>
+        <p class="subtitle">Todas tus conversiones guardadas</p>
       </div>
 
       <div class="history-controls">
-        <!-- Llama a limpiarHistorial() -->
+        <!-- Botón para volver al conversor -->
+        <button class="history-button" onclick="location.href='index.html'" style="margin-bottom: 10px; width: 100%;">
+          ← Volver al Conversor
+        </button>
+        
+        <!-- Botón limpiar historial -->
         <button class="clear-history-button" onclick="limpiarHistorial()">
           🗑️ Limpiar Historial
         </button>
       </div>
 
       <div class="history-list" id="listaHistorialHtml">
-        (Cargando...)
+        Cargando historial...
       </div>
     </div>
   </div>
