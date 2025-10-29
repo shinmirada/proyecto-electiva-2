@@ -7,10 +7,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+/**
+ * Clase que gestiona la obtención y almacenamiento de información
+ * sobre países asociados a una moneda determinada.
+ */
 export class GestorPaises {
     constructor() {
         this.API_URL = "https://restcountries.com/v3.1/currency";
         this.cachePaises = new Map();
+        /**
+         * Mapeo de monedas principales a su país más representativo.
+         */
         this.PAISES_PRINCIPALES = {
             'USD': 'United States',
             'EUR': 'Germany',
@@ -30,6 +37,12 @@ export class GestorPaises {
             'ZAR': 'South Africa'
         };
     }
+    /**
+     * Obtiene los países que utilizan una moneda determinada.
+     * Utiliza caché para evitar llamadas repetidas al servidor.
+     * @param moneda Código de la moneda (ej: "USD").
+     * @returns Lista de países asociados a la moneda.
+     */
     obtenerPaisesPorMoneda(moneda) {
         return __awaiter(this, void 0, void 0, function* () {
             if (this.cachePaises.has(moneda)) {
@@ -56,29 +69,44 @@ export class GestorPaises {
                 }));
                 const paisesOrdenados = this.ordenarPaisesPorRelevancia(paises, moneda);
                 this.cachePaises.set(moneda, paisesOrdenados);
-                console.log(` Información de ${paisesOrdenados.length} país(es) obtenida correctamente`);
+                console.log(`ℹ️ Información de ${paisesOrdenados.length} país(es) obtenida correctamente`);
                 return paisesOrdenados;
             }
             catch (error) {
-                console.error(` Error al obtener países para ${moneda}:`, error);
+                console.error(`❌ Error al obtener países para ${moneda}:`, error);
                 throw error;
             }
         });
     }
+    /**
+     * Ordena la lista de países colocando el país principal primero
+     * y los demás según su población.
+     * @param paises Lista de países obtenida de la API.
+     * @param moneda Código de la moneda.
+     * @returns Lista de países ordenada por relevancia.
+     */
     ordenarPaisesPorRelevancia(paises, moneda) {
         const paisPrincipal = this.PAISES_PRINCIPALES[moneda];
         if (!paisPrincipal) {
             return paises.sort((a, b) => b.poblacion - a.poblacion);
         }
         const principal = paises.find(p => p.nombre === paisPrincipal);
-        const otros = paises.filter(p => p.nombre !== paisPrincipal)
+        const otros = paises
+            .filter(p => p.nombre !== paisPrincipal)
             .sort((a, b) => b.poblacion - a.poblacion);
-        // 
         return principal ? [principal, ...otros] : otros;
     }
+    /**
+     * Convierte un número de población en formato legible (con comas o puntos).
+     * @param poblacion Valor numérico de población.
+     * @returns Cadena con formato legible (ej: "50.000.000").
+     */
     formatearPoblacion(poblacion) {
         return poblacion.toLocaleString('es-ES');
     }
+    /**
+     * Limpia la memoria caché de países almacenada.
+     */
     limpiarCache() {
         this.cachePaises.clear();
         console.log("🗑️ Caché de países limpiado");
