@@ -133,6 +133,27 @@ export class GestorTasas {
             return tasaDestino / tasaOrigen;
         });
     }
+    obtenerTasasDeMoneda(moneda) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const tasas = yield this.obtener();
+            const resultado = {};
+            if (!tasas[moneda]) {
+                throw new Error(`No se encontró la moneda: ${moneda}`);
+            }
+            for (const [codigo, tasa] of Object.entries(tasas)) {
+                if (codigo !== moneda) {
+                    resultado[codigo] = tasa / tasas[moneda];
+                }
+            }
+            return resultado;
+        });
+    }
+    obtenerMonedasDisponibles() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const tasas = yield this.obtener();
+            return Object.keys(tasas).sort();
+        });
+    }
     getUltimaActualizacion() {
         return this.ultimaActualizacion;
     }

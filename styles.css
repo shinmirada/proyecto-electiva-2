@@ -320,6 +320,74 @@ body {
   min-height: 100px;
 }
 
+/* ==== 🆕 CONSULTA DE TASAS ==== */
+.consulta-controls {
+  margin-bottom: 20px;
+}
+
+.tasas-container {
+  margin-top: 20px;
+  padding: 15px;
+  border-radius: 12px;
+  background: #f9f9f9;
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.tasas-header {
+  text-align: center;
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #4facfe;
+}
+
+.tasas-header h3 {
+  color: #333;
+  font-size: 22px;
+  margin-bottom: 5px;
+}
+
+.tasas-subtitle {
+  color: #666;
+  font-size: 14px;
+}
+
+.tasas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.tasa-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 15px;
+  background: white;
+  border-radius: 8px;
+  border: 2px solid #e0e0e0;
+  transition: all 0.3s ease;
+}
+
+.tasa-item:hover {
+  border-color: #4facfe;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(79, 172, 254, 0.2);
+}
+
+.tasa-moneda {
+  font-weight: bold;
+  color: #333;
+  font-size: 15px;
+}
+
+.tasa-valor {
+  color: #4facfe;
+  font-weight: bold;
+  font-size: 16px;
+}
+
 /* ==== RESPONSIVE ==== */
 @media (max-width: 600px) {
   .container {
@@ -340,20 +408,152 @@ body {
   .button-group {
     gap: 8px;
   }
+
+  .tasas-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .info-pais-detalles {
+    grid-template-columns: 1fr !important;
+  }
 }
 
 @media (min-width: 601px) {
   .button-group {
-    flex-direction: row;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
   }
   
   .convert-button {
-    flex: 1 1 100%;
+    grid-column: 1 / -1;
   }
-  
-  .update-button,
-  .history-button {
-    flex: 1 1 calc(50% - 5px);
+}
+
+/* ==== 🆕 INFORMACIÓN DEL PAÍS ==== */
+.info-pais-contenedor {
+  margin-top: 20px;
+}
+
+.info-pais-loader {
+  text-align: center;
+  padding: 20px;
+  color: #666;
+  background: #f9f9f9;
+  border-radius: 12px;
+}
+
+.info-pais-error {
+  text-align: center;
+  padding: 20px;
+  color: #ff4d4d;
+  background: #fff5f5;
+  border-radius: 12px;
+  border: 2px solid #ffcccc;
+}
+
+.info-pais-card {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 15px;
+  padding: 20px;
+  color: white;
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+  animation: slideIn 0.4s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
   }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.info-pais-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.info-pais-bandera {
+  width: 80px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  border: 3px solid white;
+}
+
+.info-pais-titulo h3 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.info-pais-subtitulo {
+  margin: 5px 0 0 0;
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.info-pais-detalles {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.info-pais-item {
+  background: rgba(255, 255, 255, 0.15);
+  padding: 12px;
+  border-radius: 10px;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+.info-pais-item:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: translateY(-2px);
+}
+
+.info-pais-icono {
+  font-size: 24px;
+  line-height: 1;
+}
+
+.info-pais-item strong {
+  display: block;
+  font-size: 12px;
+  margin-bottom: 3px;
+  opacity: 0.9;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.info-pais-item p {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.info-pais-nota {
+  margin-top: 15px;
+  text-align: center;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+}
+
+.info-pais-nota small {
+  font-size: 13px;
+  opacity: 0.9;
 }

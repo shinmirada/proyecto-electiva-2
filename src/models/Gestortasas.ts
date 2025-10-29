@@ -1,23 +1,20 @@
 import type { MonedaCodigo } from "./Tipos.js";
 
-
 export class GestorTasas {
   private tasas: Record<MonedaCodigo, number> = {};
   private base: MonedaCodigo = "USD";
   private ultimaActualizacion: Date | null = null;
   private cargandoDelServidor: boolean = false;
 
-  
   private readonly API_URL = "https://api.exchangerate-api.com/v4/latest";
   private readonly CACHE_KEY = "tasas_cache";
   private readonly TIMESTAMP_KEY = "tasas_timestamp";
-  private readonly CACHE_DURATION = 60 * 60 * 1000; 
+  private readonly CACHE_DURATION = 60 * 60 * 1000;
 
   constructor() {
     this.inicializarTasas();
   }
 
- 
   private async inicializarTasas(): Promise<void> {
     const cached = this.obtenerDelCache();
     if (cached) {
@@ -30,7 +27,6 @@ export class GestorTasas {
     }
   }
 
-  
   async actualizarDesdeAPI(base: MonedaCodigo = "USD"): Promise<boolean> {
     if (this.cargandoDelServidor) {
       console.log(" Ya hay una actualización en curso.");
@@ -59,7 +55,6 @@ export class GestorTasas {
     } catch (error) {
       console.error(" Error al actualizar desde API:", error);
 
-     
       const cacheAntiguo = this.obtenerDelCacheAntiguo();
       if (cacheAntiguo) {
         this.tasas = cacheAntiguo;
@@ -72,7 +67,6 @@ export class GestorTasas {
     }
   }
 
- 
   private async actualizarEnBackground(): Promise<void> {
     setTimeout(async () => {
       await this.actualizarDesdeAPI(this.base);
@@ -84,7 +78,6 @@ export class GestorTasas {
     localStorage.setItem(this.TIMESTAMP_KEY, Date.now().toString());
   }
 
- 
   private obtenerDelCache(): Record<MonedaCodigo, number> | null {
     const cache = localStorage.getItem(this.CACHE_KEY);
     const timestamp = localStorage.getItem(this.TIMESTAMP_KEY);
@@ -109,7 +102,6 @@ export class GestorTasas {
     }
   }
 
-
   private obtenerDelCacheAntiguo(): Record<MonedaCodigo, number> | null {
     const cache = localStorage.getItem(this.CACHE_KEY);
     if (!cache) return null;
@@ -127,7 +119,6 @@ export class GestorTasas {
     return this.tasas;
   }
 
-
   async obtenerTasa(origen: MonedaCodigo, destino: MonedaCodigo): Promise<number> {
     const tasas = await this.obtener();
 
@@ -140,15 +131,34 @@ export class GestorTasas {
       throw new Error(`No se encontró una o ambas monedas: ${origen}, ${destino}`);
     }
 
- 
     return tasaDestino / tasaOrigen;
   }
 
- 
+  async obtenerTasasDeMoneda(moneda: MonedaCodigo): Promise<Record<MonedaCodigo, number>> {
+    const tasas = await this.obtener();
+    const resultado: Record<MonedaCodigo, number> = {};
+
+    if (!tasas[moneda]) {
+      throw new Error(`No se encontró la moneda: ${moneda}`);
+    }
+
+    for (const [codigo, tasa] of Object.entries(tasas)) {
+      if (codigo !== moneda) {
+        resultado[codigo] = tasa / tasas[moneda];
+      }
+    }
+
+    return resultado;
+  }
+
+  async obtenerMonedasDisponibles(): Promise<MonedaCodigo[]> {
+    const tasas = await this.obtener();
+    return Object.keys(tasas).sort();
+  }
+
   getUltimaActualizacion(): Date | null {
     return this.ultimaActualizacion;
   }
-
 
   estaCargando(): boolean {
     return this.cargandoDelServidor;
