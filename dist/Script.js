@@ -11,9 +11,19 @@ import { ConversorMoneda } from "./models/ConversorMoneda.js";
 import { Historial } from "./models/Historial.js";
 import { GestorTasas } from "./models/Gestortasas.js";
 import { GestorPaises } from "./models/GestorPaises.js";
+/**
+ * Instancias principales utilizadas en el sistema.
+ * - historial: registra conversiones realizadas.
+ * - gestorTasas: maneja tasas de cambio actualizadas.
+ * - gestorPaises: obtiene información de países según la moneda.
+ */
 const historial = new Historial();
 const gestorTasas = new GestorTasas();
 const gestorPaises = new GestorPaises();
+/**
+ * Actualiza las tasas de cambio desde la API y cambia el texto del botón
+ * para reflejar el estado de la actualización (éxito o error).
+ */
 function actualizarTasas() {
     return __awaiter(this, void 0, void 0, function* () {
         const btnActualizar = document.getElementById("btnActualizarTasas");
@@ -40,6 +50,10 @@ function actualizarTasas() {
         }
     });
 }
+/**
+ * Convierte un monto entre dos monedas seleccionadas por el usuario.
+ * Valida el monto y actualiza los resultados en pantalla.
+ */
 function convertir() {
     return __awaiter(this, void 0, void 0, function* () {
         const monto = parseFloat(document.getElementById("cantidadOrigen").value);
@@ -68,6 +82,9 @@ function convertir() {
         }
     });
 }
+/**
+ * Muestra la interfaz del historial de conversiones y oculta el conversor.
+ */
 function mostrarHistorial() {
     const interfazHistorial = document.getElementById("interfaz-historial");
     const interfazConversor = document.getElementById("interfaz-conversor");
@@ -79,14 +96,24 @@ function mostrarHistorial() {
     const registros = historial.listar();
     lista.innerText = registros.length > 0 ? registros.join("\n") : "Todavía no hay conversiones.";
 }
+/**
+ * Muestra la interfaz del conversor principal y oculta el historial.
+ */
 function mostrarConversor() {
     document.getElementById("interfaz-conversor").style.display = "block";
     document.getElementById("interfaz-historial").style.display = "none";
 }
+/**
+ * Limpia el historial de conversiones y actualiza la vista.
+ */
 function limpiarHistorial() {
     historial.limpiar();
     mostrarHistorial();
 }
+/**
+ * Intercambia las monedas seleccionadas (origen ↔ destino)
+ * y actualiza la información del país mostrado.
+ */
 function intercambiar() {
     const origen = document.getElementById("monedaOrigen");
     const destino = document.getElementById("monedaDestino");
@@ -96,16 +123,24 @@ function intercambiar() {
     // 🆕 Actualizar información del país después de intercambiar
     alCambiarMoneda();
 }
+/**
+ * Abre la ventana modal con el historial de conversiones.
+ */
 function abrirHistorial() {
     const modal = document.getElementById("modalHistorial");
     modal.style.display = "flex";
     mostrarHistorial();
 }
+/**
+ * Cierra la ventana modal del historial.
+ */
 function cerrarHistorial() {
     const modal = document.getElementById("modalHistorial");
     modal.style.display = "none";
 }
-// 🆕 NUEVA FUNCIÓN: Consultar tasas de una moneda
+/**
+ * Consulta y muestra las tasas de cambio de una moneda seleccionada.
+ */
 function consultarTasas() {
     return __awaiter(this, void 0, void 0, function* () {
         const selectMoneda = document.getElementById("monedaConsulta");
@@ -157,7 +192,10 @@ function consultarTasas() {
         }
     });
 }
-// 🆕 NUEVA FUNCIÓN: Inicializar página de consulta de tasas
+/**
+ * Carga dinámicamente la lista de monedas disponibles
+ * en el selector de consulta de tasas.
+ */
 function inicializarConsultaTasas() {
     return __awaiter(this, void 0, void 0, function* () {
         const selectMoneda = document.getElementById("monedaConsulta");
@@ -186,7 +224,10 @@ function inicializarConsultaTasas() {
         }
     });
 }
-// 🆕 NUEVA FUNCIÓN: Cargar monedas dinámicamente en los selectores del conversor
+/**
+ * Carga todas las monedas disponibles en los selectores
+ * del conversor principal y muestra la información del país correspondiente.
+ */
 function cargarMonedasConversor() {
     return __awaiter(this, void 0, void 0, function* () {
         const selectOrigen = document.getElementById("monedaOrigen");
@@ -236,7 +277,9 @@ function cargarMonedasConversor() {
         }
     });
 }
-// 🆕 NUEVA FUNCIÓN: Mostrar información del país según la moneda
+/**
+ * Muestra la información del país relacionada con la moneda seleccionada.
+ */
 function mostrarInfoPais(moneda) {
     return __awaiter(this, void 0, void 0, function* () {
         const contenedorInfo = document.getElementById("infoPais");
@@ -320,7 +363,10 @@ function mostrarInfoPais(moneda) {
         }
     });
 }
-// 🆕 NUEVA FUNCIÓN: Manejar cambio de moneda
+/**
+ * Maneja el evento al cambiar la moneda de origen.
+ * Actualiza la información del país mostrada.
+ */
 function alCambiarMoneda() {
     return __awaiter(this, void 0, void 0, function* () {
         const selectOrigen = document.getElementById("monedaOrigen");
@@ -329,6 +375,10 @@ function alCambiarMoneda() {
         }
     });
 }
+/**
+ * Expone las funciones principales al ámbito global
+ * para que puedan ser llamadas desde el HTML.
+ */
 window.convertir = convertir;
 window.intercambiar = intercambiar;
 window.abrirHistorial = abrirHistorial;

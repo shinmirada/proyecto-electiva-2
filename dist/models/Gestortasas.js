@@ -7,6 +7,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+/**
+ * Clase que gestiona las tasas de cambio de monedas.
+ * Permite obtener, actualizar y almacenar tasas con caché local.
+ */
 export class GestorTasas {
     constructor() {
         this.tasas = {};
@@ -16,32 +20,40 @@ export class GestorTasas {
         this.API_URL = "https://api.exchangerate-api.com/v4/latest";
         this.CACHE_KEY = "tasas_cache";
         this.TIMESTAMP_KEY = "tasas_timestamp";
-        this.CACHE_DURATION = 60 * 60 * 1000;
+        this.CACHE_DURATION = 60 * 60 * 1000; // 1 hora
         this.inicializarTasas();
     }
+    /**
+     * Inicializa las tasas desde caché o desde la API si no hay datos locales.
+     */
     inicializarTasas() {
         return __awaiter(this, void 0, void 0, function* () {
             const cached = this.obtenerDelCache();
             if (cached) {
                 this.tasas = cached;
-                console.log(" Tasas cargadas desde caché local.");
+                console.log("✅ Tasas cargadas desde caché local.");
                 this.actualizarEnBackground();
             }
             else {
-                console.log(" Sin caché disponible, obteniendo desde API...");
+                console.log("🌐 Sin caché disponible, obteniendo desde API...");
                 yield this.actualizarDesdeAPI();
             }
         });
     }
+    /**
+     * Actualiza las tasas directamente desde la API.
+     * @param base Moneda base (por defecto USD).
+     * @returns true si se actualizó correctamente.
+     */
     actualizarDesdeAPI() {
         return __awaiter(this, arguments, void 0, function* (base = "USD") {
             if (this.cargandoDelServidor) {
-                console.log(" Ya hay una actualización en curso.");
+                console.log("⚠️ Ya hay una actualización en curso.");
                 return false;
             }
             this.cargandoDelServidor = true;
             try {
-                console.log(`Obteniendo tasas desde API con base ${base}...`);
+                console.log(`🔄 Obteniendo tasas desde API con base ${base}...`);
                 const response = yield fetch(`${this.API_URL}/${base}`);
                 if (!response.ok)
                     throw new Error(`Error HTTP ${response.status}`);
@@ -52,15 +64,15 @@ export class GestorTasas {
                 this.base = data.base || base;
                 this.ultimaActualizacion = new Date();
                 this.guardarEnCache();
-                console.log(" Tasas actualizadas correctamente desde la API.");
+                console.log("✅ Tasas actualizadas correctamente desde la API.");
                 return true;
             }
             catch (error) {
-                console.error(" Error al actualizar desde API:", error);
+                console.error("❌ Error al actualizar desde API:", error);
                 const cacheAntiguo = this.obtenerDelCacheAntiguo();
                 if (cacheAntiguo) {
                     this.tasas = cacheAntiguo;
-                    console.log(" Usando tasas antiguas del caché.");
+                    console.log("♻️ Usando tasas antiguas del caché.");
                 }
                 return false;
             }
@@ -69,6 +81,9 @@ export class GestorTasas {
             }
         });
     }
+    /**
+     * Lanza una actualización automática en segundo plano.
+     */
     actualizarEnBackground() {
         return __awaiter(this, void 0, void 0, function* () {
             setTimeout(() => __awaiter(this, void 0, void 0, function* () {
@@ -76,10 +91,17 @@ export class GestorTasas {
             }), 500);
         });
     }
+    /**
+     * Guarda las tasas actuales en el almacenamiento local.
+     */
     guardarEnCache() {
         localStorage.setItem(this.CACHE_KEY, JSON.stringify(this.tasas));
         localStorage.setItem(this.TIMESTAMP_KEY, Date.now().toString());
     }
+    /**
+     * Obtiene las tasas almacenadas si el caché sigue vigente.
+     * @returns Tasas guardadas o null si expiraron.
+     */
     obtenerDelCache() {
         const cache = localStorage.getItem(this.CACHE_KEY);
         const timestamp = localStorage.getItem(this.TIMESTAMP_KEY);
@@ -88,19 +110,23 @@ export class GestorTasas {
         const ahora = Date.now();
         const diferencia = ahora - parseInt(timestamp);
         if (diferencia > this.CACHE_DURATION) {
-            console.log(" Caché expirado (más de 1 hora).");
+            console.log("⌛ Caché expirado (más de 1 hora).");
             return null;
         }
         try {
             const datos = JSON.parse(cache);
             const minutosRestantes = Math.floor((this.CACHE_DURATION - diferencia) / 60000);
-            console.log(` Caché válido (${minutosRestantes} min restantes).`);
+            console.log(`🕐 Caché válido (${minutosRestantes} min restantes).`);
             return datos;
         }
         catch (_a) {
             return null;
         }
     }
+    /**
+     * Obtiene las tasas antiguas del caché sin verificar tiempo de expiración.
+     * @returns Tasas antiguas o null.
+     */
     obtenerDelCacheAntiguo() {
         const cache = localStorage.getItem(this.CACHE_KEY);
         if (!cache)
@@ -112,6 +138,9 @@ export class GestorTasas {
             return null;
         }
     }
+    /**
+     * Devuelve todas las tasas disponibles, actualizando si es necesario.
+     */
     obtener() {
         return __awaiter(this, void 0, void 0, function* () {
             if (Object.keys(this.tasas).length === 0) {
@@ -120,6 +149,12 @@ export class GestorTasas {
             return this.tasas;
         });
     }
+    /**
+     * Calcula la tasa entre dos monedas específicas.
+     * @param origen Moneda de origen.
+     * @param destino Moneda de destino.
+     * @returns Valor de conversión entre ambas.
+     */
     obtenerTasa(origen, destino) {
         return __awaiter(this, void 0, void 0, function* () {
             const tasas = yield this.obtener();
@@ -133,6 +168,11 @@ export class GestorTasas {
             return tasaDestino / tasaOrigen;
         });
     }
+    /**
+     * Obtiene todas las tasas relativas a una moneda específica.
+     * @param moneda Moneda base.
+     * @returns Objeto con tasas hacia las demás monedas.
+     */
     obtenerTasasDeMoneda(moneda) {
         return __awaiter(this, void 0, void 0, function* () {
             const tasas = yield this.obtener();
@@ -148,15 +188,24 @@ export class GestorTasas {
             return resultado;
         });
     }
+    /**
+     * Lista todas las monedas disponibles en orden alfabético.
+     */
     obtenerMonedasDisponibles() {
         return __awaiter(this, void 0, void 0, function* () {
             const tasas = yield this.obtener();
             return Object.keys(tasas).sort();
         });
     }
+    /**
+     * Devuelve la fecha de la última actualización.
+     */
     getUltimaActualizacion() {
         return this.ultimaActualizacion;
     }
+    /**
+     * Indica si actualmente se está cargando información desde la API.
+     */
     estaCargando() {
         return this.cargandoDelServidor;
     }
