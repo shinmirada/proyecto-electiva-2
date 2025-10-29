@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Consulta de Tasas de Cambio</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <div class="floating-shapes">
+    <div class="shape"></div>
+    <div class="shape"></div>
+    <div class="shape"></div>
+  </div>
+
+  <div class="container">
+    <div id="interfaz-consulta-tasas">
+      <div class="header">
+        <h2 class="title">📈 Consulta de Tasas</h2>
+        <p class="subtitle">Consulta las tasas de cambio actuales</p>
+      </div>
+
+      <div class="consulta-controls">
+        <!-- Botón para volver al conversor -->
+        <button class="history-button" onclick="location.href='index.html'" style="margin-bottom: 15px; width: 100%;">
+          ← Volver al Conversor
+        </button>
+
+        <!-- Selector de moneda -->
+        <div class="input-group">
+          <label class="input-label" for="monedaConsulta">Selecciona la moneda base:</label>
+          <select id="monedaConsulta" class="currency-select">
+            <option value="">-- Selecciona una moneda --</option>
+          </select>
+        </div>
+
+        <!-- Botón consultar -->
+        <button class="convert-button" id="btnConsultarTasas" onclick="consultarTasas()" style="margin-top: 10px;">
+          🔍 Consultar Tasas
+        </button>
+      </div>
+
+      <!-- Contenedor de resultados -->
+      <div class="tasas-container" id="resultadosTasas">
+        <p style="text-align: center; color: #666;">Selecciona una moneda y presiona "Consultar Tasas"</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Script compilado -->
+  <script type="module" src="dist/Script.js"></script>
+  
+  <!-- Script para inicializar la página de consulta -->
+  <script>
+    window.addEventListener('load', () => {
+      if (typeof inicializarConsultaTasas === 'function') {
+        inicializarConsultaTasas();
+      }
+    });
+  </script>
+</body>
+</html>

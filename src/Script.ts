@@ -1,11 +1,12 @@
 import { ConversorMoneda } from "./models/ConversorMoneda.js";
 import { Historial } from "./models/Historial.js";
 import { GestorTasas } from "./models/Gestortasas.js";
+import { GestorPaises } from "./models/GestorPaises.js";
 import type { MonedaCodigo } from "./models/Tipos.js";
 
 const historial = new Historial();
 const gestorTasas = new GestorTasas();
-
+const gestorPaises = new GestorPaises();
 
 async function actualizarTasas(): Promise<void> {
   const btnActualizar = document.getElementById("btnActualizarTasas") as HTMLButtonElement;
@@ -18,13 +19,13 @@ async function actualizarTasas(): Promise<void> {
 
   if (btnActualizar) {
     if (exito) {
-      btnActualizar.innerText = " Actualizado";
+      btnActualizar.innerText = "✅ Actualizado";
       setTimeout(() => {
         btnActualizar.innerText = "Actualizar Tasas";
         btnActualizar.disabled = false;
       }, 2000);
     } else {
-      btnActualizar.innerText = " Error al actualizar";
+      btnActualizar.innerText = "❌ Error al actualizar";
       btnActualizar.disabled = false;
       setTimeout(() => {
         btnActualizar.innerText = "Actualizar Tasas";
@@ -32,7 +33,6 @@ async function actualizarTasas(): Promise<void> {
     }
   }
 }
-
 
 async function convertir(): Promise<void> {
   const monto = parseFloat((document.getElementById("cantidadOrigen") as HTMLInputElement).value);
@@ -48,7 +48,6 @@ async function convertir(): Promise<void> {
   }
 
   try {
- 
     const tasa = await gestorTasas.obtenerTasa(origen, destino);
     const resultado = monto * tasa;
 
@@ -68,7 +67,6 @@ async function convertir(): Promise<void> {
   }
 }
 
-
 function mostrarHistorial(): void {
   const interfazHistorial = document.getElementById("interfaz-historial");
   const interfazConversor = document.getElementById("interfaz-conversor");
@@ -82,18 +80,15 @@ function mostrarHistorial(): void {
   lista.innerText = registros.length > 0 ? registros.join("\n") : "Todavía no hay conversiones.";
 }
 
-
 function mostrarConversor(): void {
   (document.getElementById("interfaz-conversor") as HTMLElement).style.display = "block";
   (document.getElementById("interfaz-historial") as HTMLElement).style.display = "none";
 }
 
-
 function limpiarHistorial(): void {
   historial.limpiar();
   mostrarHistorial();
 }
-
 
 function intercambiar(): void {
   const origen = document.getElementById("monedaOrigen") as HTMLSelectElement;
@@ -101,6 +96,9 @@ function intercambiar(): void {
   const tmp = origen.value;
   origen.value = destino.value;
   destino.value = tmp;
+  
+  // 🆕 Actualizar información del país después de intercambiar
+  alCambiarMoneda();
 }
 
 function abrirHistorial(): void {
@@ -114,6 +112,247 @@ function cerrarHistorial(): void {
   modal.style.display = "none";
 }
 
+// 🆕 NUEVA FUNCIÓN: Consultar tasas de una moneda
+async function consultarTasas(): Promise<void> {
+  const selectMoneda = document.getElementById("monedaConsulta") as HTMLSelectElement;
+  const contenedorResultados = document.getElementById("resultadosTasas") as HTMLElement;
+  const btnConsultar = document.getElementById("btnConsultarTasas") as HTMLButtonElement;
+
+  const moneda = selectMoneda.value as MonedaCodigo;
+
+  if (!moneda) {
+    contenedorResultados.innerHTML = '<p style="color: #ff4d4d;">Por favor selecciona una moneda.</p>';
+    return;
+  }
+
+  try {
+    btnConsultar.innerText = "Consultando...";
+    btnConsultar.disabled = true;
+
+    const tasas = await gestorTasas.obtenerTasasDeMoneda(moneda);
+    
+    // Crear tabla HTML con las tasas
+    let html = `
+      <div class="tasas-header">
+        <h3>Tasas de cambio desde ${moneda}</h3>
+        <p class="tasas-subtitle">1 ${moneda} equivale a:</p>
+      </div>
+      <div class="tasas-grid">
+    `;
+
+    // Ordenar y mostrar las tasas
+    const tasasOrdenadas = Object.entries(tasas).sort((a, b) => a[0].localeCompare(b[0]));
+    
+    for (const [codigo, valor] of tasasOrdenadas) {
+      const banderas: Record<string, string> = {
+        'USD': '🇺🇸', 'EUR': '🇪🇺', 'GBP': '🇬🇧', 'JPY': '🇯🇵',
+        'CAD': '🇨🇦', 'AUD': '🇦🇺', 'CHF': '🇨🇭', 'CNY': '🇨🇳',
+        'COP': '🇨🇴', 'MXN': '🇲🇽', 'BRL': '🇧🇷', 'ARS': '🇦🇷'
+      };
+      const bandera = banderas[codigo] || '🌍';
+      
+      html += `
+        <div class="tasa-item">
+          <span class="tasa-moneda">${bandera} ${codigo}</span>
+          <span class="tasa-valor">${valor.toFixed(4)}</span>
+        </div>
+      `;
+    }
+
+    html += '</div>';
+    contenedorResultados.innerHTML = html;
+
+  } catch (error) {
+    console.error(error);
+    contenedorResultados.innerHTML = '<p style="color: #ff4d4d;">Error al obtener las tasas. Intenta nuevamente.</p>';
+  } finally {
+    btnConsultar.innerText = "🔍 Consultar Tasas";
+    btnConsultar.disabled = false;
+  }
+}
+
+// 🆕 NUEVA FUNCIÓN: Inicializar página de consulta de tasas
+async function inicializarConsultaTasas(): Promise<void> {
+  const selectMoneda = document.getElementById("monedaConsulta") as HTMLSelectElement;
+  
+  if (!selectMoneda) return;
+
+  try {
+    const monedas = await gestorTasas.obtenerMonedasDisponibles();
+    
+    // Limpiar opciones existentes
+    selectMoneda.innerHTML = '<option value="">-- Selecciona una moneda --</option>';
+    
+    // Agregar todas las monedas disponibles
+    const banderas: Record<string, string> = {
+      'USD': '🇺🇸', 'EUR': '🇪🇺', 'GBP': '🇬🇧', 'JPY': '🇯🇵',
+      'CAD': '🇨🇦', 'AUD': '🇦🇺', 'CHF': '🇨🇭', 'CNY': '🇨🇳',
+      'COP': '🇨🇴', 'MXN': '🇲🇽', 'BRL': '🇧🇷', 'ARS': '🇦🇷'
+    };
+
+    for (const codigo of monedas) {
+      const bandera = banderas[codigo] || '🌍';
+      const option = document.createElement('option');
+      option.value = codigo;
+      option.textContent = `${codigo} ${bandera}`;
+      selectMoneda.appendChild(option);
+    }
+  } catch (error) {
+    console.error("Error al cargar monedas:", error);
+  }
+}
+
+// 🆕 NUEVA FUNCIÓN: Cargar monedas dinámicamente en los selectores del conversor
+async function cargarMonedasConversor(): Promise<void> {
+  const selectOrigen = document.getElementById("monedaOrigen") as HTMLSelectElement;
+  const selectDestino = document.getElementById("monedaDestino") as HTMLSelectElement;
+  
+  if (!selectOrigen || !selectDestino) return;
+
+  try {
+    const monedas = await gestorTasas.obtenerMonedasDisponibles();
+    
+    // Guardar valores seleccionados actualmente (por defecto COP y USD)
+    const origenActual = selectOrigen.value || "COP";
+    const destinoActual = selectDestino.value || "USD";
+    
+    // Banderas de monedas comunes
+    const banderas: Record<string, string> = {
+      'USD': '🇺🇸', 'EUR': '🇪🇺', 'GBP': '🇬🇧', 'JPY': '🇯🇵',
+      'CAD': '🇨🇦', 'AUD': '🇦🇺', 'CHF': '🇨🇭', 'CNY': '🇨🇳',
+      'COP': '🇨🇴', 'MXN': '🇲🇽', 'BRL': '🇧🇷', 'ARS': '🇦🇷',
+      'INR': '🇮🇳', 'KRW': '🇰🇷', 'RUB': '🇷🇺', 'ZAR': '🇿🇦',
+      'SGD': '🇸🇬', 'HKD': '🇭🇰', 'NOK': '🇳🇴', 'SEK': '🇸🇪',
+      'NZD': '🇳🇿', 'TRY': '🇹🇷', 'PLN': '🇵🇱', 'THB': '🇹🇭'
+    };
+
+    // Limpiar opciones existentes
+    selectOrigen.innerHTML = '';
+    selectDestino.innerHTML = '';
+
+    // Agregar todas las monedas disponibles
+    for (const codigo of monedas) {
+      const bandera = banderas[codigo] || '🌍';
+      
+      // Opción para origen
+      const optionOrigen = document.createElement('option');
+      optionOrigen.value = codigo;
+      optionOrigen.textContent = `${codigo} ${bandera}`;
+      selectOrigen.appendChild(optionOrigen);
+      
+      // Opción para destino
+      const optionDestino = document.createElement('option');
+      optionDestino.value = codigo;
+      optionDestino.textContent = `${codigo} ${bandera}`;
+      selectDestino.appendChild(optionDestino);
+    }
+
+    // Restaurar valores seleccionados
+    selectOrigen.value = origenActual;
+    selectDestino.value = destinoActual;
+
+    console.log(`✅ Cargadas ${monedas.length} monedas en el conversor`);
+    
+    // 🆕 Cargar información del país inicial
+    await mostrarInfoPais(origenActual);
+  } catch (error) {
+    console.error("Error al cargar monedas en conversor:", error);
+  }
+}
+
+// 🆕 NUEVA FUNCIÓN: Mostrar información del país según la moneda
+async function mostrarInfoPais(moneda: MonedaCodigo): Promise<void> {
+  const contenedorInfo = document.getElementById("infoPais");
+  
+  if (!contenedorInfo) return;
+
+  try {
+    // Mostrar loader
+    contenedorInfo.innerHTML = `
+      <div class="info-pais-loader">
+        <p>🌍 Cargando información del país...</p>
+      </div>
+    `;
+
+    const paises = await gestorPaises.obtenerPaisesPorMoneda(moneda);
+
+    if (paises.length === 0) {
+      contenedorInfo.innerHTML = `
+        <div class="info-pais-error">
+          <p>No se encontró información para esta moneda</p>
+        </div>
+      `;
+      return;
+    }
+
+    // Tomar el primer país (en caso de que múltiples países usen la misma moneda)
+    const pais = paises[0];
+    if (!pais) return;
+
+    // Mostrar información del país
+    contenedorInfo.innerHTML = `
+      <div class="info-pais-card">
+        <div class="info-pais-header">
+          <img src="${pais.bandera}" alt="Bandera de ${pais.nombre}" class="info-pais-bandera">
+          <div class="info-pais-titulo">
+            <h3>${pais.nombre}</h3>
+            <p class="info-pais-subtitulo">${pais.nombreOficial}</p>
+          </div>
+        </div>
+        <div class="info-pais-detalles">
+          <div class="info-pais-item">
+            <span class="info-pais-icono">🏛️</span>
+            <div>
+              <strong>Capital:</strong>
+              <p>${pais.capital[0]}</p>
+            </div>
+          </div>
+          <div class="info-pais-item">
+            <span class="info-pais-icono">👥</span>
+            <div>
+              <strong>Población:</strong>
+              <p>${gestorPaises.formatearPoblacion(pais.poblacion)}</p>
+            </div>
+          </div>
+          <div class="info-pais-item">
+            <span class="info-pais-icono">🌍</span>
+            <div>
+              <strong>Región:</strong>
+              <p>${pais.region} - ${pais.subregion}</p>
+            </div>
+          </div>
+          <div class="info-pais-item">
+            <span class="info-pais-icono">🗣️</span>
+            <div>
+              <strong>Idiomas:</strong>
+              <p>${pais.idiomas.slice(0, 3).join(', ')}</p>
+            </div>
+          </div>
+        </div>
+        ${paises.length > 1 ? `
+          <div class="info-pais-nota">
+            <small>💡 Esta moneda es usada por ${paises.length} países</small>
+          </div>
+        ` : ''}
+      </div>
+    `;
+  } catch (error) {
+    console.error("Error al obtener información del país:", error);
+    contenedorInfo.innerHTML = `
+      <div class="info-pais-error">
+        <p>⚠️ No se pudo cargar la información del país</p>
+      </div>
+    `;
+  }
+}
+
+// 🆕 NUEVA FUNCIÓN: Manejar cambio de moneda
+async function alCambiarMoneda(): Promise<void> {
+  const selectOrigen = document.getElementById("monedaOrigen") as HTMLSelectElement;
+  if (selectOrigen && selectOrigen.value) {
+    await mostrarInfoPais(selectOrigen.value as MonedaCodigo);
+  }
+}
 
 (window as any).convertir = convertir;
 (window as any).intercambiar = intercambiar;
@@ -123,3 +362,8 @@ function cerrarHistorial(): void {
 (window as any).mostrarHistorial = mostrarHistorial;
 (window as any).mostrarConversor = mostrarConversor;
 (window as any).actualizarTasas = actualizarTasas;
+(window as any).consultarTasas = consultarTasas;
+(window as any).inicializarConsultaTasas = inicializarConsultaTasas;
+(window as any).cargarMonedasConversor = cargarMonedasConversor;
+(window as any).mostrarInfoPais = mostrarInfoPais;
+(window as any).alCambiarMoneda = alCambiarMoneda;
