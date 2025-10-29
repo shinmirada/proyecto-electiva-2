@@ -31,18 +31,7 @@
             <input type="number" id="cantidadOrigen" class="currency-input" placeholder="0.00" step="0.01" min="0"
               value="100">
             <select id="monedaOrigen" class="currency-select">
-              <option value="USD">USD 🇺🇸</option>
-              <option value="EUR">EUR 🇪🇺</option>
-              <option value="GBP">GBP 🇬🇧</option>
-              <option value="JPY">JPY 🇯🇵</option>
-              <option value="CAD">CAD 🇨🇦</option>
-              <option value="AUD">AUD 🇦🇺</option>
-              <option value="CHF">CHF 🇨🇭</option>
-              <option value="CNY">CNY 🇨🇳</option>
-              <option value="COP" selected>COP 🇨🇴</option>
-              <option value="MXN">MXN 🇲🇽</option>
-              <option value="BRL">BRL 🇧🇷</option>
-              <option value="ARS">ARS 🇦🇷</option>
+              <option value="COP">Cargando...</option>
             </select>
           </div>
         </div>
@@ -59,18 +48,7 @@
           <div class="input-container">
             <input type="number" id="cantidadDestino" class="currency-input" placeholder="0.00" readonly>
             <select id="monedaDestino" class="currency-select">
-              <option value="USD" selected>USD 🇺🇸</option>
-              <option value="EUR">EUR 🇪🇺</option>
-              <option value="GBP">GBP 🇬🇧</option>
-              <option value="JPY">JPY 🇯🇵</option>
-              <option value="CAD">CAD 🇨🇦</option>
-              <option value="AUD">AUD 🇦🇺</option>
-              <option value="CHF">CHF 🇨🇭</option>
-              <option value="CNY">CNY 🇨🇳</option>
-              <option value="COP">COP 🇨🇴</option>
-              <option value="MXN">MXN 🇲🇽</option>
-              <option value="BRL">BRL 🇧🇷</option>
-              <option value="ARS">ARS 🇦🇷</option>
+              <option value="USD">Cargando...</option>
             </select>
           </div>
         </div>
@@ -107,6 +85,15 @@
 
   <!-- Script compilado -->
   <script type="module" src="dist/Script.js"></script>
+  
+  <!-- 🆕 Script para cargar monedas dinámicamente -->
+  <script>
+    window.addEventListener('load', () => {
+      if (typeof cargarMonedasConversor === 'function') {
+        cargarMonedasConversor();
+      }
+    });
+  </script>
 </body>
 
 </html>
