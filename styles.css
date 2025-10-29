@@ -320,6 +320,74 @@ body {
   min-height: 100px;
 }
 
+/* ==== 🆕 CONSULTA DE TASAS ==== */
+.consulta-controls {
+  margin-bottom: 20px;
+}
+
+.tasas-container {
+  margin-top: 20px;
+  padding: 15px;
+  border-radius: 12px;
+  background: #f9f9f9;
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.tasas-header {
+  text-align: center;
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #4facfe;
+}
+
+.tasas-header h3 {
+  color: #333;
+  font-size: 22px;
+  margin-bottom: 5px;
+}
+
+.tasas-subtitle {
+  color: #666;
+  font-size: 14px;
+}
+
+.tasas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.tasa-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 15px;
+  background: white;
+  border-radius: 8px;
+  border: 2px solid #e0e0e0;
+  transition: all 0.3s ease;
+}
+
+.tasa-item:hover {
+  border-color: #4facfe;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(79, 172, 254, 0.2);
+}
+
+.tasa-moneda {
+  font-weight: bold;
+  color: #333;
+  font-size: 15px;
+}
+
+.tasa-valor {
+  color: #4facfe;
+  font-weight: bold;
+  font-size: 16px;
+}
+
 /* ==== RESPONSIVE ==== */
 @media (max-width: 600px) {
   .container {
@@ -340,20 +408,20 @@ body {
   .button-group {
     gap: 8px;
   }
+
+  .tasas-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (min-width: 601px) {
   .button-group {
-    flex-direction: row;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
   }
   
   .convert-button {
-    flex: 1 1 100%;
-  }
-  
-  .update-button,
-  .history-button {
-    flex: 1 1 calc(50% - 5px);
+    grid-column: 1 / -1;
   }
 }
