@@ -1,14 +1,29 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
+  <!-- ====== METADATOS SEO ====== -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Consulta de Tasas de Cambio</title>
+  <title>Tasas de Cambio | Electiva II</title>
+  <meta name="description" content="Consulta las tasas de cambio actuales y obtén información actualizada de todas las divisas del mundo.">
+  <meta name="keywords" content="tasas de cambio, divisas, dólar, euro, monedas, cambio actual">
+  <link rel="canonical" href="https://electiva2.pages.dev/tasas.html">
   <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
+  <header>
+    <h1>Tasas de Cambio</h1>
+    <nav>
+      <a href="index.html">Inicio</a>
+      <a href="tasas.html">Tasas</a>
+      <a href="historial.html">Historial</a>
+      <a href="https://www.oanda.com" target="_blank">OANDA</a>
+      <a href="https://wise.com" target="_blank">Wise</a>
+    </nav>
+  </header>
+
+  <!-- ====== INTERFAZ ORIGINAL DE TUS TASAS ====== -->
   <div class="floating-shapes">
     <div class="shape"></div>
     <div class="shape"></div>
@@ -49,10 +64,19 @@
     </div>
   </div>
 
-  <!-- Script compilado -->
+  <!-- ====== IMÁGENES SEO ====== -->
+  <section class="imagenes-tasas">
+    <img src="img/conversion.webp" alt="Intercambio de monedas ilustrado" loading="lazy">
+    <img src="img/grafico-tasas.webp" alt="Gráfico de variación de tasas de cambio" loading="lazy">
+    <img src="img/monedas-mundo.webp" alt="Monedas del mundo" loading="lazy">
+  </section>
+
+  <footer>
+    <p>© 2025 Conversor de Monedas - Electiva II</p>
+  </footer>
+
+  <!-- Scripts -->
   <script type="module" src="dist/Script.js"></script>
-  
-  <!-- Script para inicializar la página de consulta -->
   <script>
     window.addEventListener('load', () => {
       if (typeof inicializarConsultaTasas === 'function') {
