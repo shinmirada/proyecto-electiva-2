@@ -1,14 +1,29 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
+  <!-- ====== METADATOS Y OPTIMIZACIÓN SEO ====== -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Conversor de Monedas</title>
+  <title>Conversor de Monedas | Electiva II</title>
+  <meta name="description" content="Convierte monedas al instante con tasas de cambio actualizadas y calcula divisas de todo el mundo.">
+  <meta name="keywords" content="conversor, divisas, tasas de cambio, monedas, dólar, euro, peso colombiano">
+  <link rel="canonical" href="https://electiva2.pages.dev/">
   <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
+  <header>
+    <h1>Conversor de Monedas</h1>
+    <nav>
+      <a href="index.html">Inicio</a>
+      <a href="tasas.html">Tasas</a>
+      <a href="historial.html">Historial</a>
+      <a href="https://www.xe.com" target="_blank">XE</a>
+      <a href="https://wise.com" target="_blank">Wise</a>
+    </nav>
+  </header>
+
+  <!-- ====== INTERFAZ DEL CONVERSOR ORIGINAL ====== -->
   <div class="floating-shapes">
     <div class="shape"></div>
     <div class="shape"></div>
@@ -16,20 +31,18 @@
   </div>
 
   <div class="container">
-    <!-- ================= INTERFAZ 1: Conversor ================= -->
     <div id="interfaz-conversor">
       <div class="header">
-        <h1 class="title">💱 Conversor</h1>
+        <h2 class="title">💱 Conversor</h2>
         <p class="subtitle">Convierte monedas al instante con tasas reales</p>
       </div>
 
-      <!-- El formulario llama a convertir() -->
+      <!-- FORMULARIO PRINCIPAL -->
       <form class="converter-form" id="formularioConversor" onsubmit="convertir(); return false;">
         <div class="input-group">
           <label class="input-label" for="cantidadOrigen">Cantidad a convertir</label>
           <div class="input-container">
-            <input type="number" id="cantidadOrigen" class="currency-input" placeholder="0.00" step="0.01" min="0"
-              value="100">
+            <input type="number" id="cantidadOrigen" class="currency-input" placeholder="0.00" step="0.01" min="0" value="100">
             <select id="monedaOrigen" class="currency-select" onchange="alCambiarMoneda()">
               <option value="COP">Cargando...</option>
             </select>
@@ -37,7 +50,6 @@
         </div>
 
         <div class="swap-container">
-          <!-- Llama a intercambiar() -->
           <button type="button" class="swap-button" onclick="intercambiar()" title="Intercambiar monedas">
             <span class="swap-icon">⇄</span>
           </button>
@@ -54,22 +66,18 @@
         </div>
 
         <div class="button-group">
-          <!-- Botón convertir principal -->
           <button type="submit" class="convert-button">
             <span class="button-text">💰 Convertir Ahora</span>
           </button>
 
-          <!-- Botón actualizar tasas desde API -->
           <button type="button" class="update-button" id="btnActualizarTasas" onclick="actualizarTasas()">
             <span class="button-text">🔄 Actualizar Tasas</span>
           </button>
 
-          <!-- 🆕 Botón consultar tasas -->
           <button type="button" class="history-button" onclick="location.href='tasas.html'">
             <span class="button-text">📈 Consultar Tasas</span>
           </button>
 
-          <!-- Botón ver historial -->
           <button type="button" class="history-button" onclick="location.href='historial.html'">
             <span class="button-text">📊 Ver Historial</span>
           </button>
@@ -81,7 +89,6 @@
         <div class="result-rate" id="tasaResultado"></div>
       </div>
 
-      <!-- 🆕 Información del país -->
       <div id="infoPais" class="info-pais-contenedor">
         <div class="info-pais-loader">
           <p>🌍 Cargando información del país...</p>
@@ -90,10 +97,23 @@
     </div>
   </div>
 
+  <!-- ====== IMÁGENES SEO (5 IMÁGENES) ====== -->
+  <section class="imagenes-inicio">
+    <img src="img/dolar.webp" alt="Moneda dólar estadounidense" loading="lazy">
+    <img src="img/euro.webp" alt="Moneda euro" loading="lazy">
+    <img src="img/libra.webp" alt="Moneda libra esterlina" loading="lazy">
+    <img src="img/yen.webp" alt="Moneda yen japonés" loading="lazy">
+    <img src="img/peso-colombiano.webp" alt="Moneda peso colombiano" loading="lazy">
+  </section>
+
+  <footer>
+    <p>© 2025 Conversor de Monedas - Electiva II</p>
+  </footer>
+
   <!-- Script compilado -->
   <script type="module" src="dist/Script.js"></script>
-  
-  <!-- 🆕 Script para cargar monedas dinámicamente -->
+
+  <!-- Script adicional para carga dinámica -->
   <script>
     window.addEventListener('load', () => {
       if (typeof cargarMonedasConversor === 'function') {
@@ -102,5 +122,4 @@
     });
   </script>
 </body>
-
 </html>
