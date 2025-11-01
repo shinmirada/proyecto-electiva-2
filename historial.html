@@ -1,69 +1,209 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <!-- ====== METADATOS SEO ====== -->
+  <!-- ====== METADATOS BÁSICOS ====== -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Historial de Conversiones | Electiva II</title>
-  <meta name="description" content="Consulta y gestiona tu historial de conversiones con tasas de cambio reales.">
-  <meta name="keywords" content="historial, conversiones, tasas de cambio, divisas, monedas">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  
+  <!-- ====== SEO: TÍTULO Y DESCRIPCIÓN ====== -->
+  <title>Historial de Conversiones | Consulta tus Cálculos Guardados 2025</title>
+  <meta name="description" content="Revisa tu historial completo de conversiones de monedas. Consulta y gestiona todas tus conversiones anteriores con tasas de cambio guardadas.">
+  <meta name="keywords" content="historial conversiones, conversiones guardadas, registro cambio monedas, cálculos divisas anteriores">
+  
+  <!-- ====== SEO: CANONICAL Y ROBOTS ====== -->
   <link rel="canonical" href="https://electiva2.pages.dev/historial.html">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <meta name="googlebot" content="index, follow">
+  
+  <!-- ====== SEO: AUTOR Y LENGUAJE ====== -->
+  <meta name="author" content="Electiva II - Universidad">
+  <link rel="alternate" hreflang="es" href="https://electiva2.pages.dev/historial.html">
+  
+  <!-- ====== OPEN GRAPH (Facebook, LinkedIn) ====== -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Historial de Conversiones de Monedas">
+  <meta property="og:description" content="Revisa tu historial completo de conversiones guardadas.">
+  <meta property="og:url" content="https://electiva2.pages.dev/historial.html">
+  <meta property="og:image" content="https://electiva2.pages.dev/img/historial.webp">
+  <meta property="og:locale" content="es_ES">
+  
+  <!-- ====== TWITTER CARD ====== -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Historial de Conversiones">
+  <meta name="twitter:description" content="Consulta tus conversiones anteriores">
+  <meta name="twitter:image" content="https://electiva2.pages.dev/img/historial.webp">
+  
+  <!-- ====== STRUCTURED DATA (JSON-LD) ====== -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Historial de Conversiones",
+    "url": "https://electiva2.pages.dev/historial.html",
+    "description": "Historial completo de conversiones de monedas realizadas por el usuario",
+    "isPartOf": {
+      "@type": "WebSite",
+      "name": "Conversor de Monedas",
+      "url": "https://electiva2.pages.dev/"
+    }
+  }
+  </script>
+  
   <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
-  <header>
-    <h1>Historial de Conversiones</h1>
-    <nav>
+  <!-- ====== NAVEGACIÓN ====== -->
+  <header role="banner">
+    <nav aria-label="Navegación principal">
       <a href="index.html">Inicio</a>
-      <a href="tasas.html">Tasas</a>
-      <a href="historial.html">Historial</a>
-      <a href="https://currencyconverterapi.com" target="_blank">Currency API</a>
-      <a href="https://ahrefs.com" target="_blank">Ahrefs</a>
+      <a href="tasas.html">Tasas de Cambio</a>
+      <a href="historial.html" aria-current="page">Historial</a>
+      <a href="https://currencyconverterapi.com" target="_blank" rel="noopener noreferrer external">Currency API</a>
+      <a href="https://www.exchangerate-api.com" target="_blank" rel="noopener noreferrer external">ExchangeRate API</a>
     </nav>
   </header>
 
-  <!-- ====== INTERFAZ ORIGINAL DE TU HISTORIAL ====== -->
-  <div class="floating-shapes">
+  <div class="floating-shapes" aria-hidden="true">
     <div class="shape"></div>
     <div class="shape"></div>
     <div class="shape"></div>
   </div>
 
-  <div class="container">
-    <div id="interfaz-historial">
-      <div class="header">
-        <h2 class="title">📊 Historial de Conversiones</h2>
-        <p class="subtitle">Todas tus conversiones guardadas</p>
-      </div>
+  <!-- ====== CONTENIDO PRINCIPAL ====== -->
+  <main role="main">
+    <div class="container">
+      <article>
+        <!-- ====== SOLO UN H1 POR PÁGINA ====== -->
+        <header class="header">
+          <h1 class="title">📊 Historial de Conversiones de Monedas</h1>
+          <p class="subtitle">Consulta todas tus conversiones guardadas y gestiona tu registro</p>
+        </header>
 
-      <div class="history-controls">
-        <button class="history-button" onclick="location.href='index.html'" style="margin-bottom: 10px; width: 100%;">
-          ← Volver al Conversor
-        </button>
-        
-        <button class="clear-history-button" onclick="limpiarHistorial()">
-          🗑️ Limpiar Historial
-        </button>
-      </div>
+        <!-- ====== CONTENIDO TEXTUAL PARA SEO ====== -->
+        <section class="intro-seo">
+          <p>Accede a tu <strong>historial completo de conversiones</strong> de monedas. Aquí encontrarás un registro detallado de todas las conversiones que has realizado, incluyendo las tasas de cambio utilizadas en cada cálculo y la fecha exacta de la operación.</p>
+          <p>Este historial te permite revisar conversiones anteriores sin tener que repetir los cálculos. Ideal para llevar un control de tus transacciones internacionales, verificar precios pasados o simplemente consultar conversiones que hiciste anteriormente. ¿Necesitas hacer una nueva conversión? Regresa al <a href="index.html" title="Conversor principal">conversor principal</a>.</p>
+        </section>
 
-      <div class="history-list" id="listaHistorialHtml">
-        Cargando historial...
-      </div>
+        <!-- ====== INTERFAZ DEL HISTORIAL ====== -->
+        <section id="interfaz-historial">
+          <div class="history-controls">
+            <button class="history-button" onclick="location.href='index.html'" style="margin-bottom: 10px; width: 100%;">
+              ← Volver al Conversor
+            </button>
+            
+            <button class="clear-history-button" onclick="limpiarHistorial()">
+              🗑️ Limpiar Historial
+            </button>
+          </div>
+
+          <div class="history-list" id="listaHistorialHtml" role="region" aria-live="polite">
+            Cargando historial...
+          </div>
+        </section>
+
+        <!-- ====== INFORMACIÓN ADICIONAL ====== -->
+        <section class="info-historial-seo">
+          <h2>¿Cómo funciona el historial?</h2>
+          <p>Cada vez que realizas una conversión en nuestro <a href="index.html" title="Ir al conversor">conversor de monedas</a>, el sistema guarda automáticamente:</p>
+          <ul>
+            <li><strong>Monto convertido:</strong> La cantidad original y el resultado</li>
+            <li><strong>Monedas involucradas:</strong> Moneda de origen y destino</li>
+            <li><strong>Fecha y hora:</strong> Timestamp exacto de la conversión</li>
+            <li><strong>Tasa utilizada:</strong> La tasa de cambio aplicada en ese momento</li>
+          </ul>
+          <p>Tu historial se almacena localmente en tu navegador usando localStorage, por lo que permanece disponible incluso después de cerrar la ventana. Puedes limpiarlo en cualquier momento usando el botón "Limpiar Historial".</p>
+        </section>
+
+        <!-- ====== PRIVACIDAD ====== -->
+        <section class="privacidad-seo">
+          <h2>Privacidad de tu información</h2>
+          <p>Tu historial de conversiones es completamente <strong>privado y local</strong>. No enviamos ningún dato a servidores externos. Toda la información se guarda únicamente en tu dispositivo y solo tú puedes acceder a ella. Al limpiar tu navegador o usar el botón de limpiar historial, todos los registros se eliminan permanentemente.</p>
+        </section>
+      </article>
     </div>
-  </div>
 
-  <!-- ====== IMÁGENES SEO ====== -->
-  <section class="imagenes-historial">
-    <img src="img/historial.webp" alt="Historial de conversiones registradas" loading="lazy">
-    <img src="img/estadisticas.webp" alt="Gráfico de estadísticas de conversiones" loading="lazy">
-  </section>
+    <!-- ====== 5 IMÁGENES OPTIMIZADAS PARA HISTORIAL ====== -->
+    <section class="imagenes-historial" aria-label="Visualización de historial">
+      <h2 class="sr-only">Ilustraciones sobre historial y estadísticas</h2>
+      
+      <figure>
+        <img src="img/historial.webp" 
+             alt="Interfaz de historial de conversiones de monedas con registro detallado de operaciones" 
+             title="Historial de conversiones"
+             width="400" 
+             height="300" 
+             loading="eager">
+        <figcaption>Historial de conversiones registradas</figcaption>
+      </figure>
+      
+      <figure>
+        <img src="img/estadisticas.webp" 
+             alt="Gráfico de estadísticas y análisis de conversiones de divisas realizadas" 
+             title="Estadísticas de conversiones"
+             width="400" 
+             height="300" 
+             loading="lazy">
+        <figcaption>Gráfico de estadísticas de conversiones</figcaption>
+      </figure>
+      
+      <figure>
+        <img src="img/conversion.webp" 
+             alt="Proceso de conversión de moneda guardado en historial con tasa de cambio" 
+             title="Conversión guardada"
+             width="400" 
+             height="300" 
+             loading="lazy">
+        <figcaption>Conversión de moneda guardada</figcaption>
+      </figure>
+      
+      <figure>
+        <img src="img/dolar.webp" 
+             alt="Dólar estadounidense en historial de conversiones y registro de tasas" 
+             title="Conversiones con USD"
+             width="400" 
+             height="300" 
+             loading="lazy">
+        <figcaption>Conversiones con dólar (USD)</figcaption>
+      </figure>
+      
+      <figure>
+        <img src="img/euro.webp" 
+             alt="Euro en historial de conversiones de divisas internacionales guardadas" 
+             title="Conversiones con EUR"
+             width="400" 
+             height="300" 
+             loading="lazy">
+        <figcaption>Conversiones con euro (EUR)</figcaption>
+      </figure>
+    </section>
 
-  <footer>
-    <p>© 2025 Conversor de Monedas - Electiva II</p>
+    <!-- ====== ENLACES RELACIONADOS ====== -->
+    <section class="enlaces-relacionados">
+      <h2>Herramientas relacionadas</h2>
+      <nav aria-label="Enlaces útiles">
+        <ul>
+          <li><a href="index.html" title="Ir al conversor">💱 Hacer nueva conversión de moneda</a></li>
+          <li><a href="tasas.html" title="Ver tasas">📈 Consultar tasas de cambio actuales</a></li>
+          <li><a href="https://www.xe.com/currencyconverter/" target="_blank" rel="noopener noreferrer external">🌐 XE Currency Converter</a></li>
+          <li><a href="https://www.oanda.com/currency-converter/" target="_blank" rel="noopener noreferrer external">📊 OANDA Historical Rates</a></li>
+          <li><a href="https://wise.com/es/currency-converter/" target="_blank" rel="noopener noreferrer external">💸 Wise Converter</a></li>
+        </ul>
+      </nav>
+    </section>
+  </main>
+
+  <!-- ====== FOOTER ====== -->
+  <footer role="contentinfo">
+    <p>© 2025 Conversor de Monedas - Electiva II | 
+       <a href="index.html">Inicio</a> | 
+       <a href="tasas.html">Tasas</a> | 
+       <a href="historial.html">Historial</a>
+    </p>
   </footer>
 
-  <!-- Scripts -->
   <script type="module" src="dist/Script.js"></script>
   <script>
     window.addEventListener('load', () => {
