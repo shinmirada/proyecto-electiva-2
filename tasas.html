@@ -1,81 +1,209 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <!-- ====== METADATOS SEO ====== -->
+  <!-- ====== METADATOS BÁSICOS ====== -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tasas de Cambio | Electiva II</title>
-  <meta name="description" content="Consulta las tasas de cambio actuales y obtén información actualizada de todas las divisas del mundo.">
-  <meta name="keywords" content="tasas de cambio, divisas, dólar, euro, monedas, cambio actual">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  
+  <!-- ====== SEO: TÍTULO Y DESCRIPCIÓN ====== -->
+  <title>Tasas de Cambio en Tiempo Real 2025 | Consulta Divisas Actualizadas</title>
+  <meta name="description" content="Consulta las tasas de cambio actuales de más de 150 monedas. Información actualizada de dólar, euro, peso colombiano y todas las divisas del mundo.">
+  <meta name="keywords" content="tasas de cambio, divisas actuales, cotización dólar, precio euro, tasa peso colombiano, cambio monedas hoy">
+  
+  <!-- ====== SEO: CANONICAL Y ROBOTS ====== -->
   <link rel="canonical" href="https://electiva2.pages.dev/tasas.html">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <meta name="googlebot" content="index, follow">
+  
+  <!-- ====== SEO: AUTOR Y LENGUAJE ====== -->
+  <meta name="author" content="Electiva II - Universidad">
+  <link rel="alternate" hreflang="es" href="https://electiva2.pages.dev/tasas.html">
+  
+  <!-- ====== OPEN GRAPH (Facebook, LinkedIn) ====== -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Tasas de Cambio en Tiempo Real">
+  <meta property="og:description" content="Consulta las tasas actuales de más de 150 divisas mundiales.">
+  <meta property="og:url" content="https://electiva2.pages.dev/tasas.html">
+  <meta property="og:image" content="https://electiva2.pages.dev/img/conversion.webp">
+  <meta property="og:locale" content="es_ES">
+  
+  <!-- ====== TWITTER CARD ====== -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Tasas de Cambio en Tiempo Real">
+  <meta name="twitter:description" content="Consulta tasas actualizadas de divisas">
+  <meta name="twitter:image" content="https://electiva2.pages.dev/img/conversion.webp">
+  
+  <!-- ====== STRUCTURED DATA (JSON-LD) ====== -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Tasas de Cambio en Tiempo Real",
+    "url": "https://electiva2.pages.dev/tasas.html",
+    "description": "Consulta las tasas de cambio actuales de todas las divisas del mundo",
+    "isPartOf": {
+      "@type": "WebSite",
+      "name": "Conversor de Monedas",
+      "url": "https://electiva2.pages.dev/"
+    }
+  }
+  </script>
+  
   <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
-  <header>
-    <h1>Tasas de Cambio</h1>
-    <nav>
+  <!-- ====== NAVEGACIÓN ====== -->
+  <header role="banner">
+    <nav aria-label="Navegación principal">
       <a href="index.html">Inicio</a>
-      <a href="tasas.html">Tasas</a>
+      <a href="tasas.html" aria-current="page">Tasas de Cambio</a>
       <a href="historial.html">Historial</a>
-      <a href="https://www.oanda.com" target="_blank">OANDA</a>
-      <a href="https://wise.com" target="_blank">Wise</a>
+      <a href="https://www.oanda.com" target="_blank" rel="noopener noreferrer external">OANDA</a>
+      <a href="https://wise.com" target="_blank" rel="noopener noreferrer external">Wise</a>
     </nav>
   </header>
 
-  <!-- ====== INTERFAZ ORIGINAL DE TUS TASAS ====== -->
-  <div class="floating-shapes">
+  <div class="floating-shapes" aria-hidden="true">
     <div class="shape"></div>
     <div class="shape"></div>
     <div class="shape"></div>
   </div>
 
-  <div class="container">
-    <div id="interfaz-consulta-tasas">
-      <div class="header">
-        <h2 class="title">📈 Consulta de Tasas</h2>
-        <p class="subtitle">Consulta las tasas de cambio actuales</p>
-      </div>
+  <!-- ====== CONTENIDO PRINCIPAL ====== -->
+  <main role="main">
+    <div class="container">
+      <article>
+        <!-- ====== SOLO UN H1 POR PÁGINA ====== -->
+        <header class="header">
+          <h1 class="title">📈 Tasas de Cambio en Tiempo Real</h1>
+          <p class="subtitle">Consulta las tasas actuales de más de 150 monedas del mundo</p>
+        </header>
 
-      <div class="consulta-controls">
-        <!-- Botón para volver al conversor -->
-        <button class="history-button" onclick="location.href='index.html'" style="margin-bottom: 15px; width: 100%;">
-          ← Volver al Conversor
-        </button>
+        <!-- ====== CONTENIDO TEXTUAL PARA SEO ====== -->
+        <section class="intro-seo">
+          <p>Consulta las <strong>tasas de cambio actualizadas</strong> de todas las divisas mundiales. Nuestra herramienta te permite ver cuánto vale una moneda en relación con todas las demás. ¿Quieres saber el precio del dólar hoy? ¿O la cotización del euro frente al peso colombiano?</p>
+          <p>Las tasas se actualizan cada hora desde fuentes confiables, permitiéndote tomar decisiones informadas sobre conversiones de moneda, viajes internacionales o transacciones comerciales. Selecciona cualquier <a href="#consulta-tasas" title="Ir a consulta">moneda base y consulta sus tasas</a> frente a las demás.</p>
+        </section>
 
-        <!-- Selector de moneda -->
-        <div class="input-group">
-          <label class="input-label" for="monedaConsulta">Selecciona la moneda base:</label>
-          <select id="monedaConsulta" class="currency-select">
-            <option value="">-- Selecciona una moneda --</option>
-          </select>
-        </div>
+        <!-- ====== INTERFAZ DE CONSULTA ====== -->
+        <section id="consulta-tasas">
+          <div class="consulta-controls">
+            <button class="history-button" onclick="location.href='index.html'" style="margin-bottom: 15px; width: 100%;">
+              ← Volver al Conversor
+            </button>
 
-        <!-- Botón consultar -->
-        <button class="convert-button" id="btnConsultarTasas" onclick="consultarTasas()" style="margin-top: 10px;">
-          🔍 Consultar Tasas
-        </button>
-      </div>
+            <div class="input-group">
+              <label class="input-label" for="monedaConsulta">Selecciona la moneda base:</label>
+              <select id="monedaConsulta" class="currency-select">
+                <option value="">-- Selecciona una moneda --</option>
+              </select>
+            </div>
 
-      <!-- Contenedor de resultados -->
-      <div class="tasas-container" id="resultadosTasas">
-        <p style="text-align: center; color: #666;">Selecciona una moneda y presiona "Consultar Tasas"</p>
-      </div>
+            <button class="convert-button" id="btnConsultarTasas" onclick="consultarTasas()" style="margin-top: 10px;">
+              🔍 Consultar Tasas
+            </button>
+          </div>
+
+          <div class="tasas-container" id="resultadosTasas" role="region" aria-live="polite">
+            <p style="text-align: center; color: #666;">Selecciona una moneda y presiona "Consultar Tasas"</p>
+          </div>
+        </section>
+
+        <!-- ====== INFORMACIÓN ADICIONAL ====== -->
+        <section class="info-tasas-seo">
+          <h2>¿Cómo consultar tasas de cambio?</h2>
+          <p>Nuestra interfaz es simple:</p>
+          <ol>
+            <li><strong>Selecciona una moneda base:</strong> Elige desde el menú desplegable (USD, EUR, COP, etc.)</li>
+            <li><strong>Presiona "Consultar Tasas":</strong> Verás todas las tasas de conversión</li>
+            <li><strong>Analiza los resultados:</strong> Cada valor muestra cuánto equivale 1 unidad de tu moneda base</li>
+          </ol>
+          <p>¿Necesitas convertir un monto específico? Regresa al <a href="index.html" title="Conversor principal">conversor principal</a> o consulta tu <a href="historial.html" title="Ver historial">historial de conversiones previas</a>.</p>
+        </section>
+      </article>
     </div>
-  </div>
 
-  <!-- ====== IMÁGENES SEO ====== -->
-  <section class="imagenes-tasas">
-    <img src="img/conversion.webp" alt="Intercambio de monedas ilustrado" loading="lazy">
-    <img src="img/grafico-tasas.webp" alt="Gráfico de variación de tasas de cambio" loading="lazy">
-    <img src="img/monedas-mundo.webp" alt="Monedas del mundo" loading="lazy">
-  </section>
+    <!-- ====== 5 IMÁGENES OPTIMIZADAS PARA TASAS ====== -->
+    <section class="imagenes-tasas" aria-label="Ilustraciones sobre tasas de cambio">
+      <h2 class="sr-only">Gráficos y visualizaciones de tasas</h2>
+      
+      <figure>
+        <img src="img/conversion.webp" 
+             alt="Ilustración de intercambio de monedas internacionales y conversión de divisas" 
+             title="Intercambio de divisas"
+             width="400" 
+             height="300" 
+             loading="eager">
+        <figcaption>Intercambio de monedas ilustrado</figcaption>
+      </figure>
+      
+      <figure>
+        <img src="img/grafico-tasas.webp" 
+             alt="Gráfico estadístico de variación de tasas de cambio y tendencias de mercado" 
+             title="Gráfico de tasas"
+             width="400" 
+             height="300" 
+             loading="lazy">
+        <figcaption>Gráfico de variación de tasas</figcaption>
+      </figure>
+      
+      <figure>
+        <img src="img/monedas-mundo.webp" 
+             alt="Colección de monedas de diferentes países del mundo para conversión global" 
+             title="Monedas del mundo"
+             width="400" 
+             height="300" 
+             loading="lazy">
+        <figcaption>Monedas del mundo</figcaption>
+      </figure>
+      
+      <figure>
+        <img src="img/dolar.webp" 
+             alt="Dólar estadounidense como moneda de referencia internacional para tasas de cambio" 
+             title="Dólar USD"
+             width="400" 
+             height="300" 
+             loading="lazy">
+        <figcaption>Dólar estadounidense (USD)</figcaption>
+      </figure>
+      
+      <figure>
+        <img src="img/euro.webp" 
+             alt="Euro moneda europea EUR como segunda divisa más importante del mundo" 
+             title="Euro EUR"
+             width="400" 
+             height="300" 
+             loading="lazy">
+        <figcaption>Euro (EUR)</figcaption>
+      </figure>
+    </section>
 
-  <footer>
-    <p>© 2025 Conversor de Monedas - Electiva II</p>
+    <!-- ====== ENLACES RELACIONADOS ====== -->
+    <section class="enlaces-relacionados">
+      <h2>Recursos adicionales</h2>
+      <nav aria-label="Enlaces útiles">
+        <ul>
+          <li><a href="index.html" title="Conversor principal">💱 Usar el conversor de monedas</a></li>
+          <li><a href="historial.html" title="Ver historial">📊 Ver historial de conversiones</a></li>
+          <li><a href="https://www.oanda.com/currency-converter/" target="_blank" rel="noopener noreferrer external">📈 OANDA Tasas de Cambio</a></li>
+          <li><a href="https://www.xe.com/currencytables/" target="_blank" rel="noopener noreferrer external">📋 XE Currency Tables</a></li>
+          <li><a href="https://wise.com/es/currency-converter/" target="_blank" rel="noopener noreferrer external">💸 Wise Tasas en Vivo</a></li>
+        </ul>
+      </nav>
+    </section>
+  </main>
+
+  <!-- ====== FOOTER ====== -->
+  <footer role="contentinfo">
+    <p>© 2025 Conversor de Monedas - Electiva II | 
+       <a href="index.html">Inicio</a> | 
+       <a href="tasas.html">Tasas</a> | 
+       <a href="historial.html">Historial</a>
+    </p>
   </footer>
 
-  <!-- Scripts -->
   <script type="module" src="dist/Script.js"></script>
   <script>
     window.addEventListener('load', () => {

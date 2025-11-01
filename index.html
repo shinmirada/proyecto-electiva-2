@@ -1,119 +1,249 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <!-- ====== METADATOS Y OPTIMIZACIÓN SEO ====== -->
+  <!-- ====== METADATOS BÁSICOS ====== -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Conversor de Monedas | Electiva II</title>
-  <meta name="description" content="Convierte monedas al instante con tasas de cambio actualizadas y calcula divisas de todo el mundo.">
-  <meta name="keywords" content="conversor, divisas, tasas de cambio, monedas, dólar, euro, peso colombiano">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  
+  <!-- ====== SEO: TÍTULO Y DESCRIPCIÓN ====== -->
+  <title>Conversor de Monedas Online Gratis | Tasas en Tiempo Real 2025</title>
+  <meta name="description" content="Convierte más de 150 divisas al instante con tasas de cambio actualizadas. Herramienta gratuita para convertir dólares, euros, pesos colombianos y más.">
+  <meta name="keywords" content="conversor de monedas, cambio de divisas, tasa de cambio, convertidor dólar euro, calcular divisas, peso colombiano">
+  
+  <!-- ====== SEO: CANONICAL Y ROBOTS ====== -->
   <link rel="canonical" href="https://electiva2.pages.dev/">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <meta name="googlebot" content="index, follow">
+  
+  <!-- ====== SEO: AUTOR Y LENGUAJE ====== -->
+  <meta name="author" content="Electiva II - Universidad">
+  <link rel="alternate" hreflang="es" href="https://electiva2.pages.dev/">
+  
+  <!-- ====== OPEN GRAPH (Facebook, LinkedIn) ====== -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Conversor de Monedas | Tasas en Tiempo Real">
+  <meta property="og:description" content="Convierte divisas al instante con tasas actualizadas. Más de 150 monedas disponibles.">
+  <meta property="og:url" content="https://electiva2.pages.dev/">
+  <meta property="og:image" content="https://electiva2.pages.dev/img/dolar.webp">
+  <meta property="og:locale" content="es_ES">
+  
+  <!-- ====== TWITTER CARD ====== -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Conversor de Monedas Online">
+  <meta name="twitter:description" content="Convierte divisas con tasas en tiempo real">
+  <meta name="twitter:image" content="https://electiva2.pages.dev/img/dolar.webp">
+  
+  <!-- ====== STRUCTURED DATA (JSON-LD) ====== -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Conversor de Monedas",
+    "url": "https://electiva2.pages.dev/",
+    "description": "Herramienta online gratuita para convertir divisas con tasas en tiempo real",
+    "applicationCategory": "FinanceApplication",
+    "operatingSystem": "Any",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  }
+  </script>
+  
   <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
-  <header>
-    <h1>Conversor de Monedas</h1>
-    <nav>
-      <a href="index.html">Inicio</a>
-      <a href="tasas.html">Tasas</a>
+  <!-- ====== NAVEGACIÓN ====== -->
+  <header role="banner">
+    <nav aria-label="Navegación principal">
+      <a href="index.html" aria-current="page">Inicio</a>
+      <a href="tasas.html">Tasas de Cambio</a>
       <a href="historial.html">Historial</a>
-      <a href="https://www.xe.com" target="_blank">XE</a>
-      <a href="https://wise.com" target="_blank">Wise</a>
+      <a href="https://www.xe.com" target="_blank" rel="noopener noreferrer external">XE</a>
+      <a href="https://wise.com" target="_blank" rel="noopener noreferrer external">Wise</a>
     </nav>
   </header>
 
-  <!-- ====== INTERFAZ DEL CONVERSOR ORIGINAL ====== -->
-  <div class="floating-shapes">
+  <div class="floating-shapes" aria-hidden="true">
     <div class="shape"></div>
     <div class="shape"></div>
     <div class="shape"></div>
   </div>
 
-  <div class="container">
-    <div id="interfaz-conversor">
-      <div class="header">
-        <h2 class="title">💱 Conversor</h2>
-        <p class="subtitle">Convierte monedas al instante con tasas reales</p>
-      </div>
+  <!-- ====== CONTENIDO PRINCIPAL ====== -->
+  <main role="main">
+    <div class="container">
+      <article>
+        <!-- ====== SOLO UN H1 POR PÁGINA ====== -->
+        <header class="header">
+          <h1 class="title">💱 Conversor de Monedas en Tiempo Real</h1>
+          <p class="subtitle">Convierte más de 150 divisas al instante con tasas de cambio actualizadas cada hora</p>
+        </header>
 
-      <!-- FORMULARIO PRINCIPAL -->
-      <form class="converter-form" id="formularioConversor" onsubmit="convertir(); return false;">
-        <div class="input-group">
-          <label class="input-label" for="cantidadOrigen">Cantidad a convertir</label>
-          <div class="input-container">
-            <input type="number" id="cantidadOrigen" class="currency-input" placeholder="0.00" step="0.01" min="0" value="100">
-            <select id="monedaOrigen" class="currency-select" onchange="alCambiarMoneda()">
-              <option value="COP">Cargando...</option>
-            </select>
+        <!-- ====== CONTENIDO TEXTUAL PARA SEO ====== -->
+        <section class="intro-seo">
+          <p>Nuestro <strong>conversor de monedas online</strong> te permite calcular el valor de cualquier divisa mundial de forma instantánea. Con tasas de cambio actualizadas desde la API de ExchangeRate, puedes convertir <a href="#conversor" title="Ir al conversor">dólares a pesos colombianos</a>, euros a dólares, libras esterlinas, yenes japoneses y muchas más.</p>
+          <p>¿Necesitas saber cuánto vale 100 USD en COP hoy? ¿O cuántos euros son 1000 pesos? Usa nuestra herramienta gratuita y obtén resultados precisos al instante. Ideal para viajeros, estudiantes y empresarios.</p>
+        </section>
+
+        <!-- ====== FORMULARIO CONVERSOR ====== -->
+        <section id="conversor">
+          <form class="converter-form" id="formularioConversor" onsubmit="convertir(); return false;">
+            <div class="input-group">
+              <label class="input-label" for="cantidadOrigen">Cantidad a convertir</label>
+              <div class="input-container">
+                <input type="number" id="cantidadOrigen" class="currency-input" placeholder="0.00" step="0.01" min="0" value="100">
+                <select id="monedaOrigen" class="currency-select" onchange="alCambiarMoneda()">
+                  <option value="COP">Cargando...</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="swap-container">
+              <button type="button" class="swap-button" onclick="intercambiar()" title="Intercambiar monedas">
+                <span class="swap-icon">⇄</span>
+              </button>
+            </div>
+
+            <div class="input-group">
+              <label class="input-label" for="cantidadDestino">Resultado</label>
+              <div class="input-container">
+                <input type="number" id="cantidadDestino" class="currency-input" placeholder="0.00" readonly>
+                <select id="monedaDestino" class="currency-select">
+                  <option value="USD">Cargando...</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="button-group">
+              <button type="submit" class="convert-button">
+                <span class="button-text">💰 Convertir Ahora</span>
+              </button>
+
+              <button type="button" class="update-button" id="btnActualizarTasas" onclick="actualizarTasas()">
+                <span class="button-text">🔄 Actualizar Tasas</span>
+              </button>
+
+              <button type="button" class="history-button" onclick="location.href='tasas.html'">
+                <span class="button-text">📈 Consultar Tasas</span>
+              </button>
+
+              <button type="button" class="history-button" onclick="location.href='historial.html'">
+                <span class="button-text">📊 Ver Historial</span>
+              </button>
+            </div>
+          </form>
+
+          <div class="result-container" id="contenedorResultado" role="status" aria-live="polite">
+            <div class="result-text" id="textoResultado">Ingresa un monto y presiona "Convertir Ahora"</div>
+            <div class="result-rate" id="tasaResultado"></div>
           </div>
-        </div>
 
-        <div class="swap-container">
-          <button type="button" class="swap-button" onclick="intercambiar()" title="Intercambiar monedas">
-            <span class="swap-icon">⇄</span>
-          </button>
-        </div>
-
-        <div class="input-group">
-          <label class="input-label" for="cantidadDestino">Resultado</label>
-          <div class="input-container">
-            <input type="number" id="cantidadDestino" class="currency-input" placeholder="0.00" readonly>
-            <select id="monedaDestino" class="currency-select">
-              <option value="USD">Cargando...</option>
-            </select>
+          <div id="infoPais" class="info-pais-contenedor">
+            <div class="info-pais-loader">
+              <p>🌍 Cargando información del país...</p>
+            </div>
           </div>
-        </div>
+        </section>
 
-        <div class="button-group">
-          <button type="submit" class="convert-button">
-            <span class="button-text">💰 Convertir Ahora</span>
-          </button>
-
-          <button type="button" class="update-button" id="btnActualizarTasas" onclick="actualizarTasas()">
-            <span class="button-text">🔄 Actualizar Tasas</span>
-          </button>
-
-          <button type="button" class="history-button" onclick="location.href='tasas.html'">
-            <span class="button-text">📈 Consultar Tasas</span>
-          </button>
-
-          <button type="button" class="history-button" onclick="location.href='historial.html'">
-            <span class="button-text">📊 Ver Historial</span>
-          </button>
-        </div>
-      </form>
-
-      <div class="result-container" id="contenedorResultado">
-        <div class="result-text" id="textoResultado">Ingresa un monto y presiona "Convertir Ahora"</div>
-        <div class="result-rate" id="tasaResultado"></div>
-      </div>
-
-      <div id="infoPais" class="info-pais-contenedor">
-        <div class="info-pais-loader">
-          <p>🌍 Cargando información del país...</p>
-        </div>
-      </div>
+        <!-- ====== CARACTERÍSTICAS ====== -->
+        <section class="features-seo">
+          <h2>¿Por qué usar nuestro conversor?</h2>
+          <ul>
+            <li><strong>Tasas en tiempo real:</strong> Actualizadas cada hora desde APIs confiables</li>
+            <li><strong>Más de 150 divisas:</strong> Todas las monedas principales del mundo</li>
+            <li><strong>Historial de conversiones:</strong> <a href="historial.html" title="Ver historial">Guarda tus cálculos</a> para consultarlos después</li>
+            <li><strong>Información de países:</strong> Conoce datos sobre cada moneda</li>
+            <li><strong>100% gratuito:</strong> Sin límites de uso ni registro</li>
+          </ul>
+          <p>Consulta las <a href="tasas.html" title="Ver tasas actuales">tasas de cambio completas</a> o revisa tu <a href="historial.html" title="Historial">historial de conversiones</a>.</p>
+        </section>
+      </article>
     </div>
-  </div>
 
-  <!-- ====== IMÁGENES SEO (5 IMÁGENES) ====== -->
-  <section class="imagenes-inicio">
-    <img src="img/dolar.webp" alt="Moneda dólar estadounidense" loading="lazy">
-    <img src="img/euro.webp" alt="Moneda euro" loading="lazy">
-    <img src="img/libra.webp" alt="Moneda libra esterlina" loading="lazy">
-    <img src="img/yen.webp" alt="Moneda yen japonés" loading="lazy">
-    <img src="img/peso-colombiano.webp" alt="Moneda peso colombiano" loading="lazy">
-  </section>
+    <!-- ====== 5 IMÁGENES OPTIMIZADAS PARA INDEX ====== -->
+    <section class="imagenes-inicio" aria-label="Principales monedas">
+      <h2 class="sr-only">Monedas más usadas en el mundo</h2>
+      
+      <figure>
+        <img src="img/dolar.webp" 
+             alt="Billete de 100 dólares estadounidenses USD para conversión de moneda internacional" 
+             title="Dólar estadounidense"
+             width="400" 
+             height="300" 
+             loading="eager">
+        <figcaption>Dólar estadounidense (USD)</figcaption>
+      </figure>
+      
+      <figure>
+        <img src="img/euro.webp" 
+             alt="Moneda de euro europeo EUR para cálculo de tasas de cambio" 
+             title="Euro"
+             width="400" 
+             height="300" 
+             loading="lazy">
+        <figcaption>Euro (EUR)</figcaption>
+      </figure>
+      
+      <figure>
+        <img src="img/libra.webp" 
+             alt="Libra esterlina británica GBP para conversión de divisas" 
+             title="Libra esterlina"
+             width="400" 
+             height="300" 
+             loading="lazy">
+        <figcaption>Libra esterlina (GBP)</figcaption>
+      </figure>
+      
+      <figure>
+        <img src="img/yen.webp" 
+             alt="Yen japonés JPY moneda para calcular tipo de cambio asiático" 
+             title="Yen japonés"
+             width="400" 
+             height="300" 
+             loading="lazy">
+        <figcaption>Yen japonés (JPY)</figcaption>
+      </figure>
+      
+      <figure>
+        <img src="img/peso-colombiano.webp" 
+             alt="Peso colombiano COP billete para conversión a dólar y euro" 
+             title="Peso colombiano"
+             width="400" 
+             height="300" 
+             loading="lazy">
+        <figcaption>Peso colombiano (COP)</figcaption>
+      </figure>
+    </section>
 
-  <footer>
-    <p>© 2025 Conversor de Monedas - Electiva II</p>
+    <!-- ====== ENLACES RELACIONADOS ====== -->
+    <section class="enlaces-relacionados">
+      <h2>Herramientas relacionadas</h2>
+      <nav aria-label="Enlaces útiles">
+        <ul>
+          <li><a href="tasas.html" title="Ver tasas completas">📊 Consultar todas las tasas de cambio</a></li>
+          <li><a href="historial.html" title="Ver historial">📜 Revisar historial de conversiones</a></li>
+          <li><a href="https://www.xe.com/currencyconverter/" target="_blank" rel="noopener noreferrer external">🌐 XE Currency Converter</a></li>
+          <li><a href="https://wise.com/es/currency-converter/" target="_blank" rel="noopener noreferrer external">💸 Wise Converter</a></li>
+          <li><a href="https://www.oanda.com/currency-converter/" target="_blank" rel="noopener noreferrer external">📈 OANDA Converter</a></li>
+        </ul>
+      </nav>
+    </section>
+  </main>
+
+  <!-- ====== FOOTER ====== -->
+  <footer role="contentinfo">
+    <p>© 2025 Conversor de Monedas - Electiva II | 
+       <a href="index.html">Inicio</a> | 
+       <a href="tasas.html">Tasas</a> | 
+       <a href="historial.html">Historial</a>
+    </p>
   </footer>
 
-  <!-- Script compilado -->
   <script type="module" src="dist/Script.js"></script>
-
-  <!-- Script adicional para carga dinámica -->
   <script>
     window.addEventListener('load', () => {
       if (typeof cargarMonedasConversor === 'function') {
